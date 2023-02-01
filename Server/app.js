@@ -9,6 +9,7 @@ const FilePoliceReport  = '/Report'
 const RegisterCounselors = '/Register'
 const LoginCounselors = '/Login'
 const CounselorDashboard = '/Dashboard'
+const CounselorAppointmentsUpdate = '/UpdateAppointments'
 const Home = '/'
 const AboutUs = '/About'
 
@@ -24,91 +25,32 @@ const CounselorsRoute = require('./Routes/Users')
 
 //Cloud Storage
 const Mongoose = require('mongoose')
-const { Socket } = require('socket.io')
 const ConToCloudStorage = ''
 Mongoose.connect().then(() => {console.log('Cloud Storage (MongoDB) has been connected successfully!')}).catch(() => {console.log('Connection to the cloud storage (MongoDB) has failed.')})
 
-//WebRTC 
-const CallSessionIntitator = '';
-const ConnectToSession = prompt('Please enter your name and ID')
 
-const Session = io.connect();
+//Passcode Encryption
+const Bcrypt = require('bcrypt')
+//WebRTC 
+
 //Attending a counseling session
 App.post(Controller + AttendSession, async(req, res)=>{
 
     //Get Name and contact details of patient 
     
     //Connect to session
-    switch(ConnectToSession !== ''){
-
-        case true:
-            console.log('Joining a session...Please wait....' + ConnectToSession);
-            Session.emit('create or join sesssion', ConnectToSession);
-
-            
-            //Case - Counseling sessions is booked/Counselor is in a session..Please wait
-            Session.on('full',(ConnectToSession)=>{
-
-                console.log('Session is full')
-            });
-            //Case - Counseling session is empty/Counselor is available
-            Session.on('empty',(ConnectToSession)=>{
-
-                CallSessionIntitator = true;
-
-                console.log('Session is available/Counselors are available')
-
-            });
-            //Case - Joining a counseling session
-            Session.on('join',(ConnectToSession)=>{
-
-                CallSessionIntitator = true;
-
-                console.log('Making a session available/Getting a Counselor(s) to join a session')
-                console.log('You are making a call!')
-
-
-            });
-            break;
-        case false:
-
-            break;
-        
-    }
-
-    switch(Session.on()){
-
-        //Case - Counseling sessions is booked/Counselor is in a session..Please wait
-        case 'full':
-            console.log('Session is full')
-            break;
-        //Case - Joining a counseling session
-        case 'join':
-            CallSessionIntitator = true;
-
-            console.log('Making a session available/Getting a Counselor(s) to join a session')
-            console.log('You are making a call!')
-
-            break;
-        //Case - Counseling session is empty/Counselor is available
-        case 'empty':
-            CallSessionIntitator = true;
-
-            console.log('Session is available/Counselors are available')
-            break;
-    }
 });
 
-//Filing A Police Report 
+//Patient - Filing A Police Report 
 App.post(Controller + FilePoliceReport, async(req,res)=>{
 
     PoliceReports.findOne({ID: req.body.ID}, function(err, result){
 
 
-        switch(result){
+        switch(result != null){
 
             case true:
-                res.status(201).json({Message: 'Police Report has not been filed successfully.' + "\n"+ 'This report already exists'})
+                res.status(409).json({Message: 'Police Report has not been filed successfully.' + "\n"+ 'This report already exists'})
 
                 break;
             case false:
@@ -118,7 +60,9 @@ App.post(Controller + FilePoliceReport, async(req,res)=>{
                         DayAndTime: req.body.DayAndDate,
                         Description: req.body.Incident,
                         OfficerSignature: req.body.OfficerSignature})
-                    
+
+                    PoliceReport.save()
+
                     res.status(201).json({Message: 'Your Police Report has been filed successfully.', PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' })
 
                 break;
@@ -134,16 +78,15 @@ App.post(Controller + RegisterCounselors, async(req,res)=>{
     Counselors.findOne({Username: req.body.Username}, function(err, result){
 
 
-        switch(result){
+        switch(result != null){
 
             case true:
-                res.status(201).json({Message: 'Registration Failed.' + "\n"+ 'This user already exists'})
+                res.status(409).json({Message: 'Registration Failed.' + "\n"+ 'This user already exists'})
 
                 break;
             case false:
-
                     const NewCounselors = new Counselors({ Username: req.body.Username, Password: req.body.Password})
-                
+                    NewCounselors.save()
                     res.status(201).json({Message: 'Registration successful.', NewCounselors })
 
                 break;
@@ -155,13 +98,72 @@ App.post(Controller + RegisterCounselors, async(req,res)=>{
 //Login - Counselors
 App.post(Controller + LoginCounselors, async(req,res)=>{
 
+    Counselors.findOne({Username: req.body.Username, Password: req.body.Password}, function(req, doc){
 
 
+        switch(result != null){
+
+
+            case true:
+                    Bcrypt.compare(req.body.Password, doc.Password, (err, postcomparison)=>{
+
+                        if(postcomparison){
+
+                            res.status(201).json({Message: ' Login successful', Token: token})
+                        }else{
+
+                            res.status(401).json({Messgae: 'Login Failed'})
+                        }
+                    })
+                break;
+
+            case false:
+                res.status(401).json({Messgae: 'Login Failed'})
+                break;
+
+        }
+    })
+
+});
+//Book Session (Appointment)
+App.get(Controller + CounselorDashboard, async(req,res)=>{
+
+    Appointments.findOne({ID:req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
+
+
+        switch(Appointment != null){
+
+            case true:
+                res.status(404).send({Message: 'Appointment(s) could not be created successfully: Appointment already exists'})
+                break;
+            case false:
+                const NewAppointment =  new Appointments({ID:req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime})
+                NewAppointment.save()
+                res.status(201).send({Message: 'Appointment has been set successfully', Details: Appointment})
+                break;
+         
+
+        }
+    })
 });
 //Dashboard - Counselors - View upcomming sessions
 App.get(Controller + CounselorDashboard, async(req,res)=>{
 
+        Appointments.find({}, function(err, Appointments){
 
+
+            switch(Appointments != null){
+
+                case true:
+                        res.status(200).send(JSON.stringify(Appointments))
+                    break;
+
+                case false:
+                     res.status(404).send({Message: 'Appointment(s) unavailable'})
+                    break;
+
+            }
+        })
 });
 //Home Page - Landing Page
 App.get(Controller + Home, async(req,res)=>{
@@ -173,7 +175,7 @@ App.get(Controller + Home, async(req,res)=>{
 //About Page - Purpose of Themba & Details of procedures
 App.get(Controller + AboutUs, async(req,res)=>{
 
-
+    res.send('Themba is a (insert decription here later!!!)')
 
 });
 
