@@ -62,7 +62,6 @@ App.use((req,res, next)=>{
     next();
 });
 //WebRTC 
-
 //Attending a counseling session
 App.post(Controller + AttendSession, async(req, res)=>{
 
@@ -70,7 +69,6 @@ App.post(Controller + AttendSession, async(req, res)=>{
     ThembaDDOSProtect.prevent;
     //Get Name and contact details of patient 
     Appointment.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime},function(err, FoundAppointment){
-
 
 
         switch(FoundAppointment != null){
