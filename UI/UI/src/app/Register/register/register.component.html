@@ -1,1 +1,22 @@
-<p>register works!</p>
+<body>
+    <div class="Registration" style="text-align:center">
+
+        <form enctype="multipart/form-data" (ngSubmit)="Registration(NewRegistration)" #FreshRegistration="ngForm">
+
+            <label><b>Username</b></label>
+            <input type="text" ngModel name="NewCounselorUsername" #NewCounselorUsername="ngModel" placeholder="Enter your username here"  
+            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
+            <br/>
+            <div *ngIf="NewCounselorUsername.invalid && (NewCounselorUsername.dirty || NewCounselorUsername.touched)">A username is required to proceed.</div>
+            <label><b>Password</b></label>
+            <input type="password" ngModel name="NewCounselorPasscode" #NewCounselorPasscode="ngModel" placeholder="Enter your password here"  
+            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
+            <br/>
+            <div *ngIf="NewCounselorPasscode.invalid && (NewCounselorPasscode.dirty || NewCounselorPasscode.touched)">Password cannot be left empty!</div>
+            <br/>
+            <button class="btn btn-outline-warning" type="submit" size="15" name="RegisterButton">Register</button>
+            <br/>
+            <button class="btn btn-outline-danger" type="reset" size="15" name="ResetButton">Reset</button>
+        </form>
+    </div>
+</body>
