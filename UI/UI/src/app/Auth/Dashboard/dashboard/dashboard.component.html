@@ -4,7 +4,7 @@
         
         <h1>Upcomming appointments</h1>
 
-        <div *ngIf = "Appointment.length >1">
+       
         <table class="AppointmentsView">
             <th>Patient ID</th>
             <th>Patient Name</th>
@@ -12,17 +12,15 @@
             <th>Date & Time</th>
             <th>Attend Session</th>
 
-            <tr><pre>{{Appointment.ID| json}}</pre></tr>
+          <!--  <tr><pre>{{Appointment.ID| json}}</pre></tr>
             <tr><pre>{{Appointment.Name| json}}</pre></tr>
             <tr><pre>{{Appointment.Surname| json}}</pre></tr>
-            <tr><pre>{{Appointment.DayAndTime| json}}</pre></tr>
+            <tr><pre>{{Appointment.DayAndTime| json}}</pre></tr>-->
             <tr><button class="btn btn-outline-success" type="submit" size="15" name="AttendSessionButton">Attend Appointment</button></tr>
         </table>
         <br/>
         <button class="btn btn-outline-info" type="submit" size="15" name="UpdateAppointsButton">Update Appointments</button>
         
-        
-        </div>
 
     </div>
 </body>

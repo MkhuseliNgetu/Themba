@@ -1,18 +1,18 @@
 <body>
     <div class="PoliceReports" style="text-align:center">
 
-        <form enctype="multipart/form-data" (ngSubmit)="PoliceReports(FreshReport)" #NewReport="ngForm">
+        <form enctype="multipart/form-data" (ngSubmit)="PoliceReports(NewReport)" #NewReport="ngForm">
 
             <label><b>Name:</b></label>
             <input type="text" ngModel name="SuppliedPatientName" #SuppliedPatientName="ngModel" placeholder="Enter your name here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
             <br/>
-            <div *ngIf="SuppliedCounselorUsername.invalid && (SuppliedCounselorUsername.dirty || SuppliedCounselorUsername.touched)">A username is required to proceed.</div>
+            <div *ngIf="SuppliedPatientName.invalid && (SuppliedPatientName.dirty || SuppliedPatientName.touched)">A username is required to proceed.</div>
             <label><b>Surname</b></label>
-            <input type="password" ngModel name="SuppliedPatientSurname" #SuppliedCounselorPasscode="ngModel" placeholder="Enter your surname here"  
+            <input type="text" ngModel name="SuppliedPatientSurname" #SuppliedPatientSurname="ngModel" placeholder="Enter your surname here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
             <br/>
-            <div *ngIf="SuppliedCounselorPasscode.invalid && (SuppliedCounselorPasscode.dirty || SuppliedCounselorPasscode.touched)">Password cannot be left empty!</div>
+            <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)">Password cannot be left empty!</div>
             <br/>
             <label><b>Date:</b></label>
             <input type="datetime-local" ngModel name="SuppliedPatientDateAndTime" #SuppliedPatientDateAndTime="ngModel" required/>
@@ -23,7 +23,7 @@
             <input type="text" ngModel name="SuppliedDescription" #SuppliedDescription="ngModel" placeholder="Enter the description of the event here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required/>
             <br/>
-            <div *ngIf="SuppliedDescription.invalid && (SSuppliedDescription.dirty || SuppliedDescription.touched)">The desciption of the event cannot be left empty!</div>
+            <div *ngIf="SuppliedDescription.invalid && (SuppliedDescription.dirty || SuppliedDescription.touched)">The desciption of the event cannot be left empty!</div>
             <br/>
             <button class="btn btn-outline-warning" type="submit" size="15" name="LoginButton">Login</button>
             <br/>
