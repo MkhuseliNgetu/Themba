@@ -8,29 +8,28 @@ const AppointmentStorage = require('../DataWarehouse/Appointments')
 const Bcrypt = require('bcrypt')
 //Authorisation
 const JWT = require('jsonwebtoken');
-const { router } = require('../app');
 //Addesses
 const RegisterCounselors = '/Register'
 const LoginCounselors = '/Login'
 const CounselorDashboard = '/Dashboard'
 const CounselorAppointmentsUpdate = '/UpdateAppointments'
-const Controller = '/Themba'
 
 //Security
 //DDOS Mitigations
 var ThembaProtection = require('express-brute');
+const VerifyUser = require('../Verify-User');
 var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
 var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
 
 //Registration - Counselors
-Router.post(Controller+RegisterCounselors, function(res,req){
+Router.post(RegisterCounselors, function(res,req){
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    Bcrypt.hash(req.body.Password, 10).then(hash=>{
+    Bcrypt.hash(req.body.Passcode, 10).then(hash=>{
 
-        UserStorage.findOne({Username: req.body.Username, Password: req.body.Password}, function(err, FoundUser){
+        UserStorage.findOne({Username: req.body.Username, Password: req.body.Passcode}, function(err, FoundUser){
 
             switch(FoundUser != null){
 
@@ -38,7 +37,7 @@ Router.post(Controller+RegisterCounselors, function(res,req){
                     res.status(409).json({Message: 'Error: Registration Failed.' + "\n"+ 'This user already exists'});
                     break;
                 case false:
-                    const NewCounselor = new UserStorage({ Username: req.body.Username, Password: req.body.Password})
+                    const NewCounselor = new UserStorage({ Username: req.body.Username, Password: req.body.Passcode})
                    
                     NewCounselor.save().then(outcome =>{
                         res.status(201).json({Message: 'Registration successful.'});
@@ -55,13 +54,13 @@ Router.post(Controller+RegisterCounselors, function(res,req){
 
 })
 //Login - Counselors
-Router.post(Controller+ LoginCounselors, function(res,req){
+Router.post(LoginCounselors, function(res,req){
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
     let existingcounselor
-    Bcrypt.hash(req.body.Password, 10).then(hash=>{
+    Bcrypt.hash(req.body.Passcode, 10).then(hash=>{
 
     UserStorage.findOne({Username: req.body.Username}).then(ExistingUser=>{
         
@@ -76,7 +75,7 @@ Router.post(Controller+ LoginCounselors, function(res,req){
 
             existingcounselor = ExistingUser
 
-            return Bcrypt.compare(req.body.Password, existingcounselor.Password);
+            return Bcrypt.compare(req.body.Passcode, existingcounselor.Passcode);
 
             
         }
@@ -106,7 +105,7 @@ Router.post(Controller+ LoginCounselors, function(res,req){
 })
 
 //Dashboard - Counselors - View upcomming sessions
-Router.get(Controller+CounselorDashboard, function(res,req){
+Router.get(CounselorDashboard, VerifyUser,function(res,req){
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -128,7 +127,7 @@ Router.get(Controller+CounselorDashboard, function(res,req){
 
 })
 //Update Appointments
-Router.patch(Controller+CounselorAppointmentsUpdate, function(res,req){
+Router.patch(CounselorAppointmentsUpdate, VerifyUser, function(res,req){
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
