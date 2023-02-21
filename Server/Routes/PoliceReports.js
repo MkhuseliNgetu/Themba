@@ -4,8 +4,8 @@ const Router = Express.Router();
 //Cloud Storage
 const ReportStorage = require('../DataWarehouse/PoliceReports')
 //Addesses
-const FilePoliceReport  = '/Report'
-const Controller = '/Themba'
+const FilePoliceReport ='/Report'
+
 
 //Security
 //DDOS Mitigations
@@ -14,7 +14,7 @@ var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
 var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
 
 //Patient - Filing A Police Report 
-Router.post(Controller+FilePoliceReport, function(res,req){
+Router.post(FilePoliceReport, function(res,req){
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -27,7 +27,7 @@ Router.post(Controller+FilePoliceReport, function(res,req){
 
                 break;
             case false:
-                    const PoliceReport = new PoliceReports({ ID: req.body.ID,
+                    const PoliceReport = new ReportStorage({ ID: req.body.ID,
                         Name: req.body.Name,
                         Surname: req.body.Surname,
                         DayAndTime: req.body.DayAndDate,
@@ -43,3 +43,5 @@ Router.post(Controller+FilePoliceReport, function(res,req){
 
     })
 })
+
+module.exports = Router;

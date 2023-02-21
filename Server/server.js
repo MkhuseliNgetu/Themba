@@ -1,16 +1,15 @@
 const HTTP = require('http');
-const RequiredPort = 3000;
-const app = require('./app');
+const RequiredPort = 3000
+const App = require('./app');
 
+const fs = require('fs')
 
+const Server = HTTP.createServer({
 
-const Server = HTTP.createServer((req, res)=>{
+    key: fs.readFileSync('SSL/TPrivateKey.pem'),
+    cert: fs.readFileSync('SSL/TCertificate.pem')
 
-res.log('Themba has started successfully');
-res.log('Now starting other services...Please wait....');
-
-
-});
+},App);
 
 
 Server.listen(RequiredPort);

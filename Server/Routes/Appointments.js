@@ -8,7 +8,9 @@ const AttendSession = '/Session'
 const Controller = '/Themba'
 
 //Patient - Filing A Police Report 
-Router.post(Controller+FilePoliceReport, function(res,req){
+Router.post(AttendSession, function(res,req){
 
 
 })
+
+module.exports = Router;
