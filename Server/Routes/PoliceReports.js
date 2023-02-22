@@ -14,7 +14,7 @@ var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
 var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
 
 //Patient - Filing A Police Report 
-Router.post(FilePoliceReport, function(res,req){
+Router.post(FilePoliceReport,(res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;

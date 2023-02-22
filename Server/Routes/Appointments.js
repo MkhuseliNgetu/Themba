@@ -8,7 +8,7 @@ const AttendSession = '/Session'
 const Controller = '/Themba'
 
 //Patient - Filing A Police Report 
-Router.post(AttendSession, function(res,req){
+Router.post(AttendSession, (res,req)=>{
 
 
 })

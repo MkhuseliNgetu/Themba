@@ -22,7 +22,7 @@ var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
 var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
 
 //Registration - Counselors
-Router.post(RegisterCounselors, function(res,req){
+Router.post(RegisterCounselors,(res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -54,7 +54,7 @@ Router.post(RegisterCounselors, function(res,req){
 
 })
 //Login - Counselors
-Router.post(LoginCounselors, function(res,req){
+Router.post(LoginCounselors, (res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -105,7 +105,7 @@ Router.post(LoginCounselors, function(res,req){
 })
 
 //Dashboard - Counselors - View upcomming sessions
-Router.get(CounselorDashboard, VerifyUser,function(res,req){
+Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -127,7 +127,7 @@ Router.get(CounselorDashboard, VerifyUser,function(res,req){
 
 })
 //Update Appointments
-Router.patch(CounselorAppointmentsUpdate, VerifyUser, function(res,req){
+Router.patch(CounselorAppointmentsUpdate, VerifyUser,(res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;

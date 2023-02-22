@@ -94,7 +94,7 @@ App.post(Controller + AttendSession, (req, res)=>{
 });
 
 //Patient - Filing A Police Report 
-App.post(Controller + FilePoliceReport, async(req,res)=>{
+App.post(Controller + FilePoliceReport, (req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
