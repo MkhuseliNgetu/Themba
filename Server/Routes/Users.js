@@ -27,6 +27,8 @@ Router.post(RegisterCounselors,(res,req)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
+    const NewCounselor = new UserStorage({ Username: req.body.Username, Password: req.body.Passcode});
+                   
     Bcrypt.hash(req.body.Passcode, 10).then(hash=>{
 
         UserStorage.findOne({Username: req.body.Username, Password: req.body.Passcode}, function(err, FoundUser){
@@ -37,9 +39,8 @@ Router.post(RegisterCounselors,(res,req)=>{
                     res.status(409).json({Message: 'Error: Registration Failed.' + "\n"+ 'This user already exists'});
                     break;
                 case false:
-                    const NewCounselor = new UserStorage({ Username: req.body.Username, Password: req.body.Passcode})
                    
-                    NewCounselor.save().then(outcome =>{
+                    NewCounselor.save().then(() =>{
                         res.status(201).json({Message: 'Registration successful.'});
                     })
                    
@@ -49,7 +50,7 @@ Router.post(RegisterCounselors,(res,req)=>{
         })
 
 
-    })
+    });
 
 
 })
@@ -123,7 +124,7 @@ Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
                 break;
 
         }
-    })
+    });
 
 })
 //Update Appointments
@@ -146,7 +147,7 @@ Router.patch(CounselorAppointmentsUpdate, VerifyUser,(res,req)=>{
          
 
         }
-    })
+    });
 
 })
     

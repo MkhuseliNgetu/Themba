@@ -1,8 +1,8 @@
 const HTTP = require('https');
-const RequiredPort = 3000
 const App = require('./app');
+const fs = require('fs');
 
-const fs = require('fs')
+const RequiredPort = 3000
 
 const Server = HTTP.createServer({
 

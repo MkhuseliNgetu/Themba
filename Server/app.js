@@ -76,7 +76,7 @@ App.post(Controller + AttendSession, (req, res)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
     //Get Name and contact details of patient 
-    Appointment.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime},function(err, FoundAppointment){
+    Appointment.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime}, function(err, FoundAppointment){
 
 
         switch(FoundAppointment != null){
@@ -89,9 +89,9 @@ App.post(Controller + AttendSession, (req, res)=>{
                 break;
 
         }
-    })
+    });
     //Connect to session
-});
+})
 
 //Patient - Filing A Police Report 
 App.post(Controller + FilePoliceReport, (req,res)=>{
@@ -99,39 +99,40 @@ App.post(Controller + FilePoliceReport, (req,res)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    PoliceReports.findOne({ID: req.body.ID}, function(err, result){
+    const PoliceReport = new PoliceReports({ID: req.body.id,
+        Name: req.body.Name,
+        Surname: req.body.Surname,
+        DayAndTime: req.body.DayAndDate,
+        Description: req.body.Description,
+        OfficerSignature: req.body.OfficerSignature})
+
+    PoliceReports.findOne({ID: req.body.id}, function(err, result){
 
 
-        switch(result != null){
+        switch(result){
 
             case true:
-                res.status(409).json({Message: 'Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
-
-                break;
+            res.status(409).json({Message: 'Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
+            break;
+            
             case false:
-                    const PoliceReport = new PoliceReports({ ID: req.body.ID,
-                        Name: req.body.Name,
-                        Surname: req.body.Surname,
-                        DayAndTime: req.body.DayAndDate,
-                        Description: req.body.Incident,
-                        OfficerSignature: req.body.OfficerSignature})
-
-                    PoliceReport.save()
-
-                    res.status(201).json({Message: 'Your Police Report has been filed successfully.', PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
-
-                break;
+            PoliceReport.save()
+            res.status(201).json({Message: 'Your Police Report has been filed successfully.', Report: PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
+            break;
         }
 
-    })
+    });
     
 
-});
+})
 //Registration - Counselors
 App.post(Controller + RegisterCounselors, (req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
+
+    const NewCounselors = new Counselors({ Username: req.body.Username, Passcode: req.body.Passcode});
+   
 
     Counselors.findOne({Username: req.body.Username}, function(err, result){
 
@@ -143,16 +144,16 @@ App.post(Controller + RegisterCounselors, (req,res)=>{
 
                 break;
             case false:
-                    const NewCounselors = new Counselors({ Username: req.body.Username, Passcode: req.body.Passcode});
-                    NewCounselors.save()
-                    res.status(201).json({Message: 'Registration successful.', NewCounselors });
+
+                NewCounselors.save()
+                res.status(201).json({Message: 'Registration successful.', NewCounselors });
 
                 break;
         }
 
-    })
+    });
 
-});
+})
 //Login - Counselors
 App.post(Controller + LoginCounselors,(req,res)=>{
 
@@ -179,13 +180,13 @@ App.post(Controller + LoginCounselors,(req,res)=>{
                 break;
 
             case false:
-                res.status(401).json({Messgae: 'Login Failed'});
+                res.status(401).json({Message: 'Login Failed'});
                 break;
 
         }
-    })
+    });
 
-});
+})
 //Dashboard - Counselors - View upcomming sessions
 App.get(Controller + CounselorDashboard, async(req,res)=>{
 
@@ -206,15 +207,15 @@ App.get(Controller + CounselorDashboard, async(req,res)=>{
                     break;
 
             }
-        })
-});
+        });
+})
 //Update Appointments
 App.patch(Controller + CounselorAppointmentsUpdate, async(res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    AppointmentStorage.findOneAndRemove({ID:req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
+    AppointmentStorage.findOneAndRemove({ID: req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
 
 
         switch(Appointment != null){
@@ -228,9 +229,9 @@ App.patch(Controller + CounselorAppointmentsUpdate, async(res,req)=>{
          
 
         }
-    })
+    });
 
-});
+})
 App.use(Controller+AttendSession,AppointmentsRoute)
 App.use(Controller+FilePoliceReport, PoliceReportsRoute)
 App.use(Controller+RegisterCounselors,CounselorsRoute)
