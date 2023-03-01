@@ -18,30 +18,29 @@ Router.post(FilePoliceReport,(res,req)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
+    
+    const PoliceReport = new ReportStorage({ ID: req.body.id,
+        Name: req.body.Name,
+        Surname: req.body.Surname,
+        DayAndTime: req.body.DayAndDate,
+        Description: req.body.Description,
+        OfficerSignature: req.body.OfficerSignature})
 
-    PoliceReports.findOne({ID: req.body.ID}, function(err, result){
+    PoliceReports.findOne({ID: req.body.id}, function(err, result){
         switch(result != null){
 
             case true:
                 res.status(409).json({Message: 'Error: Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
 
                 break;
-            case false:
-                    const PoliceReport = new ReportStorage({ ID: req.body.ID,
-                        Name: req.body.Name,
-                        Surname: req.body.Surname,
-                        DayAndTime: req.body.DayAndDate,
-                        Description: req.body.Incident,
-                        OfficerSignature: req.body.OfficerSignature})
-
-                    PoliceReport.save()
-
-                    res.status(201).json({Message: 'Your Police Report has been filed successfully.', PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
+            case false:     
+                PoliceReport.save()
+                res.status(201).json({Message: 'Your Police Report has been filed successfully.', PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
 
                 break;
         }
 
-    })
+    });
 })
 
 module.exports = Router;
