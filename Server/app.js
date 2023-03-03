@@ -21,11 +21,11 @@ const PoliceReportsRoute = require('./Routes/PoliceReports')
 const CounselorsRoute = require('./Routes/Users')
 
 //Cloud Storage
+const Mongoose = require('mongoose')
 const fs = require('fs')
 const url = require('inspector')
 const certificate =  fs.readFileSync('SSL/TCertificate.pem')
 const option = {Server: {SSLCA: certificate}};
-const Mongoose = require('mongoose')
 const ConToCloudStorage = 'mongodb+srv://MNgetu83:MuD8WnEf5zhhpHar@cluster0.vwavmzr.mongodb.net/?retryWrites=true&w=majority'
 //This programming statement was adapted from Mozilla Developer:
 //Link: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose
@@ -38,6 +38,8 @@ Mongoose.connect(ConToCloudStorage).then(() => {console.log('Cloud Storage (Mong
 //Security
 //Passcode Encryption
 const Bcrypt = require('bcrypt')
+
+App.use(Express.json())
 
 //DDOS Mitigations
 var ThembaProtection = require('express-brute');
@@ -68,7 +70,6 @@ App.use((req,res, next)=>{
 });
 
 
-
 //WebRTC 
 //Attending a counseling session
 App.post(Controller + AttendSession, (req, res)=>{
@@ -76,19 +77,18 @@ App.post(Controller + AttendSession, (req, res)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
     //Get Name and contact details of patient 
-    Appointment.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime}, function(err, FoundAppointment){
+    Appointments.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime}, function(err, FoundAppointment){
 
 
-        switch(FoundAppointment != null){
-
-            case true:
-
-                break;
-            case false:
-                    res.status(409).json({Message: 'Error: Session could not be loaded' +"\n"+ 'Appointment could not be found.'});
-                break;
-
+        switch(FoundAppointment){
+        case true:
+        
+        break;
+        case false:
+                res.status(409).json({Message: 'Error: Session could not be loaded' +"\n"+ 'Appointment could not be found.'});
+        break;
         }
+
     });
     //Connect to session
 })
@@ -99,20 +99,21 @@ App.post(Controller + FilePoliceReport, (req,res)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    const PoliceReport = new PoliceReports({ID: req.body.id,
+    const PoliceReport = new PoliceReports({ID: req.body.ID,
         Name: req.body.Name,
         Surname: req.body.Surname,
         DayAndTime: req.body.DayAndDate,
         Description: req.body.Description,
         OfficerSignature: req.body.OfficerSignature})
 
-    PoliceReports.findOne({ID: req.body.id}, function(err, result){
+    PoliceReports.findOne({ID: req.body.ID}, function(err, result){
 
 
         switch(result){
 
             case true:
             res.status(409).json({Message: 'Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
+            
             break;
             
             case false:
@@ -137,16 +138,17 @@ App.post(Controller + RegisterCounselors, (req,res)=>{
     Counselors.findOne({Username: req.body.Username}, function(err, result){
 
 
-        switch(result != null){
+        switch(result){
 
             case true:
                 res.status(409).json({Message: 'Registration Failed.' + "\n"+ 'This user already exists'})
-
                 break;
             case false:
 
-                NewCounselors.save()
-                res.status(201).json({Message: 'Registration successful.', NewCounselors });
+                NewCounselors.save().then(() =>{
+                res.status(201).json({Message: 'Registration successful.', CounselorDetails: result  })
+                })
+                
 
                 break;
         }

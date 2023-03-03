@@ -14,7 +14,7 @@ POST https://localhost:3000/Themba/Register HTTP/1.1
 content-type: application/json
 
 {
-    "Username": "Jake",
+    "Username": "Jake16767",
     "Passcode": "L@mbert_7835$#"
 }
 ###
@@ -41,3 +41,16 @@ Authorization: Bearer
 {
 
 }
+###
+POST https://localhost:3000/Themba/Session HTTP/1.1
+content-type: application/json 
+
+{
+    "ID":"Revolver Ocelot",
+    "Name":"ACDP",
+    "Surname":"Foss96",
+    "DayAndTime": "2023-05-09 15:00"
+
+}
+###
+GET https://localhost:3000/Themba HTTP/1.1
