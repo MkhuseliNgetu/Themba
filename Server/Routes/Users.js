@@ -33,7 +33,7 @@ Router.post(RegisterCounselors,(res,req)=>{
 
         UserStorage.findOne({Username: req.body.Username, Password: req.body.Passcode}, function(err, FoundUser){
 
-            switch(FoundUser != null){
+            switch(FoundUser){
 
                 case true:
                     res.status(409).json({Message: 'Error: Registration Failed.' + "\n"+ 'This user already exists'});
@@ -41,7 +41,7 @@ Router.post(RegisterCounselors,(res,req)=>{
                 case false:
                    
                     NewCounselor.save().then(() =>{
-                        res.status(201).json({Message: 'Registration successful.'});
+                        res.status(201).json({Message: 'Registration successful.', CounselorDetails: FoundUser });
                     })
                    
                     break;
