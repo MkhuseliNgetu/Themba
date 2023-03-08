@@ -5,16 +5,19 @@ import { LoginComponent } from './Auth/Login/login/login.component';
 import { DashboardComponent} from './Auth/Dashboard/dashboard/dashboard.component';
 import { PoliceReportComponent } from './Police-Report/police-report/police-report.component';
 import { SessionComponent } from './Appointments/session/session.component';
+import { ValidateSessionComponent } from './Appointments/validate-session/validate-session.component';
 
-const ThembaRoutes: Routes = [{path: 'Register', component: RegisterComponent},
-{path: 'Login', component: LoginComponent},
-{path: 'Dashboard', component: DashboardComponent},
-{path: 'Report', component: PoliceReportComponent},
-{path: 'Session', component: SessionComponent}
+const ThembaRoutes: Routes = [
+{path:'Register', component: RegisterComponent},
+{path:'Login', component: LoginComponent},
+{path:'Dashboard', component: DashboardComponent},
+{path:'Report', component: PoliceReportComponent},
+{path:'Session', component: SessionComponent},
+{path:'ValidateSession', component: ValidateSessionComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(ThembaRoutes)],
+  imports: [RouterModule.forRoot(ThembaRoutes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

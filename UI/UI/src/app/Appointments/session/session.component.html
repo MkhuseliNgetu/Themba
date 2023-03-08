@@ -1,1 +1,48 @@
-<p>session works!</p>
+
+<script>
+    function AttendSession(){
+
+    var VideoStream = document.createElement('video');
+    const PreferedVideoType = 'mp4';
+    const PreferedCodecType = 'avc1.4D401E,mp4a.40.2'
+    const IsMyCameraSupported = VideoStream.canPlayType(PreferedVideoType+';codecs="'+PreferedCodecType+'"');
+
+    if(IsMyCameraSupported){
+
+    alert('My stream is supported');
+    }else{
+
+    alert('My stream is not supported');
+    }
+
+
+    }
+</script>
+
+<div class="Session" style="text-align:center" onload="AttendSession()">
+
+
+
+    <table>
+
+    <th> Patient</th>
+    <th> Couselour</th>
+
+    <tr>
+        <video class="PatientVideoFeed" width="1280" height="720">
+
+            <source src="" type="">
+        </video>
+
+    </tr>
+    <tr>
+        <video class="CounselorVideoFeed" width="1280" height="720">
+
+            <source src="" type="">
+        </video>
+    </tr>
+    </table>
+
+
+
+</div>

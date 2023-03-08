@@ -1,33 +1,52 @@
-<body>
-    <div class="PoliceReports" style="text-align:center">
+<div class="PoliceReports" style="text-align:center">
 
+        <h1>File Affidavit</h1>
+        
         <form enctype="multipart/form-data" (ngSubmit)="PoliceReports(NewReport)" #NewReport="ngForm">
+       
 
-            <label><b>Name:</b></label>
+            <label><b>Name</b></label>
+            <br/>
             <input type="text" ngModel name="SuppliedPatientName" #SuppliedPatientName="ngModel" placeholder="Enter your name here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
+            <div *ngIf="SuppliedPatientName.invalid && (SuppliedPatientName.dirty || SuppliedPatientName.touched)" style="color: red;">*A username is required to proceed.</div>
             <br/>
-            <div *ngIf="SuppliedPatientName.invalid && (SuppliedPatientName.dirty || SuppliedPatientName.touched)">A username is required to proceed.</div>
+
             <label><b>Surname</b></label>
+            <br/>
             <input type="text" ngModel name="SuppliedPatientSurname" #SuppliedPatientSurname="ngModel" placeholder="Enter your surname here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
             <br/>
-            <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)">Password cannot be left empty!</div>
+            <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)" style="color: red;">*Password cannot be left empty!</div>
             <br/>
-            <label><b>Date:</b></label>
+
+            <label><b>Date</b></label>
+            <br/>
             <input type="datetime-local" ngModel name="SuppliedPatientDateAndTime" #SuppliedPatientDateAndTime="ngModel" required/>
             <br/>
-            <div *ngIf="SuppliedPatientDateAndTime.invalid">Date and time of the event must be supplied to proceed</div>
+            <div *ngIf="SuppliedPatientDateAndTime.invalid" style="color: red;">*Date and time of the event must be supplied to proceed</div>
             <br/>
-            <label><b>Description:</b></label>
+
+            <label><b>Description</b></label>
+            <br/>
             <input type="text" ngModel name="SuppliedDescription" #SuppliedDescription="ngModel" placeholder="Enter the description of the event here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required/>
             <br/>
-            <div *ngIf="SuppliedDescription.invalid && (SuppliedDescription.dirty || SuppliedDescription.touched)">The desciption of the event cannot be left empty!</div>
+            <div *ngIf="SuppliedDescription.invalid && (SuppliedDescription.dirty || SuppliedDescription.touched)" style="color: red;">*The description of the event cannot be left empty!</div>
             <br/>
-            <button class="btn btn-outline-warning" type="submit" size="15" name="LoginButton">Login</button>
-            <br/>
-            <button class="btn btn-outline-danger" type="reset" size="15" name="ResetButton">Reset</button>
+
+            <button class="btn btn-outline-warning" type="submit" size="15" name="LoginButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg>
+            Login
+            </button>
+            <button class="btn btn-outline-danger" type="reset" size="15" name="ResetButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+             Reset
+            </button>
         </form>
-    </div>
-</body>
+</div>

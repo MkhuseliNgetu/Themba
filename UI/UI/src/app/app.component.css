@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Montreal';
+    src: url(/UI/UI/src/assets/Fonts/montrealdemo.otf) format("opentype");
+    
+}
+
+.HeadingStyleTwo {
+
+    font-family: 'Montreal';
+    color: black;
+}
+body{
+    padding-top: 100px;
+}
