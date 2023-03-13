@@ -9,7 +9,7 @@ import { UserServiceService } from 'src/app/Auth/user-service.service';
 })
 export class PoliceReportComponent implements OnInit {
 
-  constructor() {}
+  constructor(public ReportService: UserServiceService) {}
 
   ngOnInit(): void {
     
@@ -17,6 +17,24 @@ export class PoliceReportComponent implements OnInit {
 
   PoliceReports(FreshReport: NgForm) {
 
+    switch(FreshReport.invalid){
+
+      case true:
+
+        alert('Your police report was not filed successfully due to missing content')
+
+        FreshReport.resetForm();
+        break;
+
+      case false:
+      
+        this.ReportService.PoliceReportService(FreshReport.value.SuppliedPatientIdenticationNumber,FreshReport.value.SuppliedPatientName,
+        FreshReport.value.SuppliedPatientSurname, FreshReport.value.SuppliedPatientDateAndTime, FreshReport.value.SuppliedDescription)
+
+        FreshReport.resetForm();
+        break;
+
+    }
 
   }
 }

@@ -5,6 +5,7 @@
         <form enctype="multipart/form-data" (ngSubmit)="Registration(FreshRegistration)" #FreshRegistration="ngForm">
 
             <label><b>Username</b></label>
+            <br/>
             <input type="text" ngModel name="CounselorUsername" #CounselorUsername="ngModel" placeholder="Enter your username here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
             <br/>
@@ -12,6 +13,7 @@
             <br/>
             
             <label><b>Password</b></label>
+            <br/>
             <input type="password" ngModel name="CounselorPasscode" #CounselorPasscode="ngModel" placeholder="Enter your password here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
             <br/>

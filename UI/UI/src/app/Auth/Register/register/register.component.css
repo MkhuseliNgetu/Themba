@@ -1,0 +1,22 @@
+form{
+    box-shadow: 2px 2px 2px 2px grey;
+    background: #fff;
+    border-radius: 10px;
+    width: fit-content;
+    height: fit-content;
+  
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+  
+    margin-top: 75px;
+    margin-left: 750px;
+    margin-right: 150px;
+    margin-bottom: 150px;
+  }
+  input{
+  
+    border-radius: 5px;
+  
+  }

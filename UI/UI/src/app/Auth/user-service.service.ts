@@ -15,7 +15,7 @@ export class UserServiceService {
 
     this.HTTP.post<{Message: String}>('https://localhost:3000/Themba/Register',
     {Username:CounselorUsername, Password: CounselorPasscode})
-    .pipe(retry(2),catchError(this.AuthenticationError))
+    .pipe(retry(2),catchError(this.ServerError))
     .subscribe(RegistrationStatus => {alert(RegistrationStatus.Message)})
   }
   //Counselors #2
@@ -23,12 +23,28 @@ export class UserServiceService {
 
     this.HTTP.post<{Message: String, Token: String}>('https://localhost:3000/Themba/Login',
     {Username:SuppliedCounselorUsername, Password: SuppliedCounselorPasscode})
-    .pipe(retry(2),catchError(this.AuthenticationError))
+    .pipe(retry(2),catchError(this.ServerError))
     .subscribe(LoginStatus => {const Token = LoginStatus.Token; this.AuthToken = Token; 
       alert(JSON.stringify(LoginStatus.Message))})
   }
+  //Counselor #3
+  DashboardService(): any {
+
+    this.HTTP.get<{Message: String}>('https://localhost:3000/Themba/Dashboard',
+    {}).pipe(retry(2), catchError(this.ServerError))
+  }
+
 
   //Patients
+  PoliceReportService(SuppliedPatientIdenticationNumber: String, SuppliedPatientName: String, SuppliedPatientSurname: String, SuppliedPatientDateAndTime: String, SuppliedDescription: String) : any {
+
+    this.HTTP.post<{Message: String, PoliceReport: String,Reminder: String}>('http://localhost:3000/Themba/Report',
+     {ID:SuppliedPatientIdenticationNumber,
+      Name: SuppliedPatientName,
+      Surname: SuppliedPatientSurname,
+      DayAndTime: SuppliedPatientDateAndTime,
+      Description: SuppliedDescription}).pipe(retry(2), catchError(this.ServerError)).subscribe(PoliceReportStatus =>{alert(PoliceReportStatus.Message+"\n"+PoliceReportStatus.Reminder)})
+  }
 
   //Counselor & Patients #1
   GetAuthToken(){
@@ -37,7 +53,7 @@ export class UserServiceService {
   }
 
   //Counselor & Patients #2
-  AuthenticationError(AuthError: HttpErrorResponse){
+  ServerError(AuthError: HttpErrorResponse){
 
     let ThembaErrorMessage = "";
 
@@ -55,5 +71,18 @@ export class UserServiceService {
     console.log(ThembaErrorMessage)
     return throwError(ThembaErrorMessage)
   }
+
+  
+  //Counselor & Patients #3
+  ValidateSession(SuppliedSessionIdenticationNumber: String,SuppliedPatientName: String, SuppliedPatientSurname: String,SuppliedSessionDateAndTime: String): any{
+
+    this.HTTP.post<{Message: String}>('https://localhost:3000/Themba/ValidateSession',
+    {ID:SuppliedSessionIdenticationNumber,
+      Name: SuppliedPatientName,
+      Surname: SuppliedPatientSurname,
+      DayAndTime: SuppliedSessionDateAndTime,}).pipe(retry(2), catchError(this.ServerError)).subscribe(SessionStatus =>{alert(SessionStatus.Message)})
+  }
+  //Counselor & Patients #4
+  //AttentSession()
 
 }

@@ -3,3 +3,17 @@
     src: url(/UI/UI/src/assets/Fonts/montrealdemo.otf) format("opentype");
     
 }
+
+nav a:hover{
+
+    background-color:skyblue;
+    border-radius: 10px;
+    text-align: center;
+}
+
+footer{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+}

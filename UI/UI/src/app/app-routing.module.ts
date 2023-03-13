@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { RegisterComponent } from './Auth/Register/register/register.component';
 import { LoginComponent } from './Auth/Login/login/login.component';
 import { DashboardComponent} from './Auth/Dashboard/dashboard/dashboard.component';
@@ -17,6 +18,7 @@ const ThembaRoutes: Routes = [
 ];
 
 @NgModule({
+  declarations: [],
   imports: [RouterModule.forRoot(ThembaRoutes)],
   exports: [RouterModule]
 })

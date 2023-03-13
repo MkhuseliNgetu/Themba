@@ -5,6 +5,14 @@
         <form enctype="multipart/form-data" (ngSubmit)="PoliceReports(NewReport)" #NewReport="ngForm">
        
 
+            <label><b>ID</b></label>
+            <br/>
+            <input type="text" ngModel name="SuppliedPatientIdenticationNumber" #SuppliedPatientIdenticationNumber="ngModel" placeholder="Enter your ID number here"  
+            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="13"/>
+            <div *ngIf="SuppliedPatientIdenticationNumber.invalid && (SuppliedPatientIdenticationNumber.dirty || SuppliedPatientIdenticationNumber.touched)" style="color: red;">*Your ID number is required to proceed.</div>
+            <br/>
+
+
             <label><b>Name</b></label>
             <br/>
             <input type="text" ngModel name="SuppliedPatientName" #SuppliedPatientName="ngModel" placeholder="Enter your name here"  
