@@ -37,8 +37,8 @@
 
             <label><b>Description</b></label>
             <br/>
-            <input type="text" ngModel name="SuppliedDescription" #SuppliedDescription="ngModel" placeholder="Enter the description of the event here"  
-            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required/>
+            <textarea ngModel name="SuppliedDescription" #SuppliedDescription="ngModel"  
+            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" cols="40" required>Enter the description of the event here</textarea>
             <br/>
             <div *ngIf="SuppliedDescription.invalid && (SuppliedDescription.dirty || SuppliedDescription.touched)" style="color: red;">*The description of the event cannot be left empty!</div>
             <br/>

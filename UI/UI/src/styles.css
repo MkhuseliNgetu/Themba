@@ -1,19 +1,39 @@
 @font-face {
-    font-family: 'Montreal';
-    src: url(/UI/UI/src/assets/Fonts/montrealdemo.otf) format("opentype");
-    
+    font-family: "Montreal";
+    src: local("Montreal");
+    src: url("./assets/Fonts/montrealdemo.otf") format("opentype");
+    src: url("./assets/Fonts/montrealdemo.otf") format("woff"),
+         url("./assets/Fonts/montrealdemo.otf") format("woff2");
+
+    font-size: xx-large;
 }
 
 nav a:hover{
 
-    background-color:skyblue;
+    background-color:teal;
     border-radius: 10px;
     text-align: center;
+    
 }
 
+nav{
+
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-align: center;
+
+}
+p{
+    font-family: "Montreal";
+
+}
 footer{
     position: fixed;
     width: 100%;
     bottom: 0;
     text-align: center;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    box-shadow: 2px 2px 2px 2px grey;
+    background: #fff;
 }
