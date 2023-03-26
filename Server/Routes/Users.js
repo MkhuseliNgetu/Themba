@@ -8,6 +8,8 @@ const AppointmentStorage = require('../DataWarehouse/Appointments')
 const Bcrypt = require('bcrypt')
 //Authorisation
 const JWT = require('jsonwebtoken');
+const { router } = require('../app');
+const VerifyUser = require('../Verify-User')
 //Addesses
 const RegisterCounselors = '/Register'
 const LoginCounselors = '/Login'
@@ -55,35 +57,15 @@ Router.post(RegisterCounselors,(res,req)=>{
 
 })
 //Login - Counselors
-Router.post(LoginCounselors, (res,req)=>{
+Router.post(Controller+RegisterCounselors, function(res,req){
 
-    //DDOS Protection 
-    ThembaDDOSProtect.prevent;
 
-    let existingcounselor
-    Bcrypt.hash(req.body.Passcode, 10).then(hash=>{
-
-    UserStorage.findOne({Username: req.body.Username}).then(ExistingUser=>{
+            
         
 
-        if(!ExistingUser){
-
-          
-            res.status(401).json({Message: 'Error: Login unsuccessful' + "\n"+ 'Incorrect username/password'});
-
-            
-        }else{
-
-            existingcounselor = ExistingUser
-
-            return Bcrypt.compare(req.body.Passcode, existingcounselor.Passcode);
-
-            
-        }
 
 
-
-    }).then(result=>{
+}).then(result=>{
 
 
         if(!result){
@@ -99,11 +81,7 @@ Router.post(LoginCounselors, (res,req)=>{
 
         res.status(401).json({Message: 'Error: Login unsuccessful' + "\n"+ 'Incorrect username/password'});
 
-    })
-
-})
-    
-})
+    });
 
 //Dashboard - Counselors - View upcomming sessions
 Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
