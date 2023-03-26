@@ -2,10 +2,10 @@ POST https://localhost:3000/Themba/Report HTTP/1.1
 content-type: application/json
 
 {
-    "ID": "Solid1",
+    "ID": "Solid8",
     "Name": "Renton",
     "Surname": "Foss",
-    "DayAndTime": "2023-05-09 15:00",
+    "DayAndTime": "15 March 2023",
     "Description": "Testing Statement 1"
 
 }
@@ -14,7 +14,7 @@ POST https://localhost:3000/Themba/Register HTTP/1.1
 content-type: application/json
 
 {
-    "Username": "Jake16767",
+    "Username": "Jake5",
     "Passcode": "L@mbert_7835$#"
 }
 ###
@@ -42,7 +42,7 @@ Authorization: Bearer
 
 }
 ###
-POST https://localhost:3000/Themba/Session HTTP/1.1
+POST https://localhost:3000/Themba/ValidateSession HTTP/1.1
 content-type: application/json 
 
 {
@@ -52,5 +52,3 @@ content-type: application/json
     "DayAndTime": "2023-05-09 15:00"
 
 }
-###
-GET https://localhost:3000/Themba HTTP/1.1
