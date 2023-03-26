@@ -4,6 +4,7 @@ const App = Express()
 //WebPages
 const Controller = '/Themba'
 const AttendSession = '/Session'
+const ValidateSession = '/ValidateSession'
 const FilePoliceReport  = '/Report'
 const RegisterCounselors = '/Register'
 const LoginCounselors = '/Login'
@@ -72,7 +73,13 @@ App.use((req,res, next)=>{
 
 //WebRTC 
 //Attending a counseling session
-App.post(Controller + AttendSession, (req, res)=>{
+App.get(Controller+AttendSession, (req, res)=>{
+
+
+
+})
+//Checking whether the patient's book session is valid
+App.post(Controller + ValidateSession, (req, res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -80,17 +87,15 @@ App.post(Controller + AttendSession, (req, res)=>{
     Appointments.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime}, function(err, FoundAppointment){
 
 
-        switch(FoundAppointment){
-        case true:
-        
-        break;
-        case false:
-                res.status(409).json({Message: 'Error: Session could not be loaded' +"\n"+ 'Appointment could not be found.'});
-        break;
-        }
+    if(FoundAppointment){
+
+            res.status(200).json({Message: 'Session has been found successsfully. Please wait while counselor joins into the sesssion...'});
+    }else{
+            res.status(409).json({Message: 'Error: Session could not be loaded, this appointment could not be found.'});
+    }
 
     });
-    //Connect to session
+
 })
 
 //Patient - Filing A Police Report 
@@ -99,27 +104,29 @@ App.post(Controller + FilePoliceReport, (req,res)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
+    //Format Supplied Date
+    //This programming statement was adapted from Momentjs:
+    //Link: https://momentjs.com/
+    //Author: Momentjs
+    const ReportDate = require('moment')
+
+    //This programming statement was adapted from Momentjs:
+    //Link: https://momentjs.com/
+    //Author: Momentjs
     const PoliceReport = new PoliceReports({ID: req.body.ID,
         Name: req.body.Name,
         Surname: req.body.Surname,
-        DayAndTime: req.body.DayAndDate,
+        DayAndTime: ReportDate(req.body.DayAndTime).format('DD/MMM/YYYY'),
         Description: req.body.Description,
         OfficerSignature: req.body.OfficerSignature})
 
     PoliceReports.findOne({ID: req.body.ID}, function(err, result){
 
-
-        switch(result){
-
-            case true:
-            res.status(409).json({Message: 'Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
-            
-            break;
-            
-            case false:
-            PoliceReport.save()
-            res.status(201).json({Message: 'Your Police Report has been filed successfully.', Report: PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
-            break;
+        if(result){
+        res.status(409).json({Message: 'Error: Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
+        }else{
+        PoliceReport.save()
+        res.status(201).json({Message: 'Your Police Report has been filed successfully.', PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
         }
 
     });
@@ -127,7 +134,7 @@ App.post(Controller + FilePoliceReport, (req,res)=>{
 
 })
 //Registration - Counselors
-App.post(Controller + RegisterCounselors, (req,res)=>{
+App.post(Controller + RegisterCounselors,(req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -138,19 +145,17 @@ App.post(Controller + RegisterCounselors, (req,res)=>{
     Counselors.findOne({Username: req.body.Username}, function(err, result){
 
 
-        switch(result){
+        if(result){
 
-            case true:
+           
                 res.status(409).json({Message: 'Registration Failed.' + "\n"+ 'This user already exists'})
-                break;
-            case false:
+        }else{
 
                 NewCounselors.save().then(() =>{
-                res.status(201).json({Message: 'Registration successful.', CounselorDetails: result  })
+                res.status(201).json({Message: 'Registration successful.'})
                 })
                 
 
-                break;
         }
 
     });
@@ -162,53 +167,44 @@ App.post(Controller + LoginCounselors,(req,res)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    Counselors.findOne({Username: req.body.Username, Password: req.body.Passcode}, function(req, doc){
+    Counselors.findOne({Username:req.body.Username}, function(err, FoundCounselor) {
+        
 
+        Bcrypt.compare(req.body.Passcode, FoundCounselor.Passcode, (err, EncryptionOutcome)=>{
 
-        switch(result != null){
-
-
-            case true:
-                    Bcrypt.compare(req.body.Passcode, doc.Passcode, (err, postcomparison)=>{
-
-                        if(postcomparison){
-
-                            res.status(201).json({Message: ' Login successful', Token: token});
-                        }else{
-
-                            res.status(401).json({Messgae: 'Login Failed'});
-                        }
-                    })
-                break;
-
-            case false:
+            if(EncryptionOutcome){
+                res.status(201).json({Message: 'Login successful', Token: token});
+            }else{
                 res.status(401).json({Message: 'Login Failed'});
-                break;
-
-        }
+            }
+                
+        })
+        
+ 
     });
 
 })
+
 //Dashboard - Counselors - View upcomming sessions
 App.get(Controller + CounselorDashboard, async(req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-        Appointments.find({}, function(err, Appointments){
+        Appointments.find({}, function(err, AllAppointments){
 
 
-            switch(Appointments != null){
+            if(AllAppointments){
+                res.status(200).send(AllAppointments,array.forEach(element => {
+                    JSON.stringify(element)
+                }));
 
-                case true:
-                        res.status(200).send(JSON.stringify(Appointments));
-                    break;
-
-                case false:
-                     res.status(404).send({Message: 'Appointment(s) unavailable'});
-                    break;
-
+            }else{
+                res.status(404).send({Message: 'Appointment(s) unavailable'});
             }
+  
+
+            
         });
 })
 //Update Appointments
@@ -217,20 +213,16 @@ App.patch(Controller + CounselorAppointmentsUpdate, async(res,req)=>{
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    AppointmentStorage.findOneAndRemove({ID: req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
+    Appointments.findOneAndRemove({ID: req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
 
+        if(Appointment){
 
-        switch(Appointment != null){
-
-            case true:
-                res.status(200).send({Message: 'Appointments have been updated successfully'});
-                break;
-            case false:
-                res.status(404).send({Message: 'Appointments have not been updated successfully'});
-                break;
-         
+            res.status(200).send({Message: 'Appointments have been updated successfully'});
+        }else{
+            res.status(404).send({Message: 'Appointments have not been updated successfully'});
 
         }
+        
     });
 
 })

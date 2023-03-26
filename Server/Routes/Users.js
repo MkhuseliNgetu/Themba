@@ -16,38 +16,22 @@ const LoginCounselors = '/Login'
 const CounselorDashboard = '/Dashboard'
 const CounselorAppointmentsUpdate = '/UpdateAppointments'
 
-//Security
-//DDOS Mitigations
-var ThembaProtection = require('express-brute');
-const VerifyUser = require('../Verify-User');
-var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
-var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
-
 //Registration - Counselors
 Router.post(RegisterCounselors,(res,req)=>{
 
-    //DDOS Protection 
-    ThembaDDOSProtect.prevent;
+    Bcrypt.hash(req.body.Passcode, 10).then(SafePasscode=>{
 
-    const NewCounselor = new UserStorage({ Username: req.body.Username, Password: req.body.Passcode});
-                   
-    Bcrypt.hash(req.body.Passcode, 10).then(hash=>{
+        const NewCounselor = new UserStorage({Username: req.body.Username, Password: SafePasscode});
 
-        UserStorage.findOne({Username: req.body.Username, Password: req.body.Passcode}, function(err, FoundUser){
+        UserStorage.findOne({Username: req.body.Username}, function(err, FoundUser){
 
-            switch(FoundUser){
+            if(FoundUser){
 
-                case true:
                     res.status(409).json({Message: 'Error: Registration Failed.' + "\n"+ 'This user already exists'});
-                    break;
-                case false:
-                   
-                    NewCounselor.save().then(() =>{
-                        res.status(201).json({Message: 'Registration successful.', CounselorDetails: FoundUser });
+            }else{
+                    NewCounselor.save().then(CounselorOutcome =>{
+                        res.status(201).json({Message: 'Registration successful.', Counselor:  CounselorOutcome});
                     })
-                   
-                    break;
-
             }
         })
 
@@ -57,15 +41,22 @@ Router.post(RegisterCounselors,(res,req)=>{
 
 })
 //Login - Counselors
-Router.post(Controller+RegisterCounselors, function(res,req){
+Router.post(LoginCounselors, (res,req)=>{
 
+let existingcounselor;
 
-            
+    UserStorage.findOne({Username: req.body.Username}).then(ExistingUser=>{
+
+        if(!ExistingUser){
+
+            return res.status(401).json({Message: 'Authentication failed.'});
+        }else{
+
+            existingcounselor = ExistingUser;
+            return Bcrypt.compare(req.body.Passcode,existingcounselor.Passcode)
+        }
         
-
-
-
-}).then(result=>{
+    }).then(result=>{
 
 
         if(!result){
@@ -83,24 +74,21 @@ Router.post(Controller+RegisterCounselors, function(res,req){
 
     });
 
+})
+
 //Dashboard - Counselors - View upcomming sessions
 Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
 
-    //DDOS Protection 
-    ThembaDDOSProtect.prevent;
 
-    Appointments.find({}, function(err, Appointments){
+    Appointments.find({}, function(err, AllAppointments){
 
+        if(AllAppointments){
+            res.status(200).send(AllAppointments,array.forEach(element => {
+                JSON.stringify(element)
+            }));
 
-        switch(Appointments != null){
-
-            case true:
-                res.status(200).send(JSON.stringify(Appointments));
-                break;
-            case false:
-                 res.status(404).send({Message: 'Appointment(s) unavailable'});
-                break;
-
+        }else{
+            res.status(404).send({Message: 'Appointment(s) unavailable'});
         }
     });
 
@@ -108,22 +96,14 @@ Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
 //Update Appointments
 Router.patch(CounselorAppointmentsUpdate, VerifyUser,(res,req)=>{
 
-    //DDOS Protection 
-    ThembaDDOSProtect.prevent;
 
     AppointmentStorage.findOneAndRemove({ID:req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
 
+        if(Appointment){
 
-        switch(Appointment != null){
-
-            case true:
-                res.status(200).send({Message: 'Appointments have been updated successfully'});
-                break;
-            case false:
-                res.status(404).send({Message: 'Appointments have not been updated successfully'});
-                break;
-         
-
+            res.status(200).send({Message: 'Appointments have been updated successfully'});
+        }else{
+            res.status(404).send({Message: 'Appointments have not been updated successfully'});
         }
     });
 

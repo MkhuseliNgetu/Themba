@@ -4,7 +4,7 @@ const CounselorsStucture = Mongoose.Schema(
 
 {
     Username: {type: String, required: true},
-    Passcode: {type: Date, required: true}
+    Passcode: {type: String, required: true}
 }
 
 )
