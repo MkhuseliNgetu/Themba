@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { UserServiceService } from 'src/app/Auth/user-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-validate-session',
@@ -11,7 +12,7 @@ import { UserServiceService } from 'src/app/Auth/user-service.service';
 export class ValidateSessionComponent {
 
 
-  constructor(public SessionService: UserServiceService) {}
+  constructor(public SessionService: UserServiceService, public OpenSession: Router) {}
 
   ngOnInit(): void{
 
@@ -24,9 +25,12 @@ export class ValidateSessionComponent {
 
       case true:
 
-      alert('No session with your details was found')
+        alert('No session with your details was found')
 
-      MySession.resetForm();
+        MySession.resetForm();
+
+        this.OpenSession.navigate(['/Loading']);
+    
         break;
 
       case false:
@@ -35,6 +39,9 @@ export class ValidateSessionComponent {
                                             MySession.value.SuppliedPatientSurname, MySession.value.SuppliedSessionDateAndTime)
       
         MySession.resetForm();
+        
+        this.OpenSession.navigate(['/Loading']);
+     
         break;
     }
   }

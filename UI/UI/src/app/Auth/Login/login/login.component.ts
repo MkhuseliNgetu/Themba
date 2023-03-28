@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
       alert('No valid credentials have been supplied to login')
 
       FreshLogin.resetForm();
+
+      this.AuthenticationRouter.navigate(['/Dashboard'])
       return
     }else{
 
@@ -33,6 +35,8 @@ export class LoginComponent implements OnInit {
 
         this.CounselorsService.LoginService(FreshLogin.value.SuppliedCounselorUsername, FreshLogin.value.SuppliedCounselorPasscode)
         FreshLogin.resetForm();
+
+        this.AuthenticationRouter.navigate(['/Dashboard'])
 
       }
       

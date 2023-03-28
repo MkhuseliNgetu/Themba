@@ -20,6 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
 //Error Handling
 import { ErrorComponent } from './Error/error/error.component';
 import { ErrorInterceptor } from './Error/error.interceptor';
+import { LoadingScreenComponent } from './loading/loading-screen/loading-screen.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ErrorInterceptor } from './Error/error.interceptor';
     SessionComponent,
     ErrorComponent,
     ValidateSessionComponent,
+    LoadingScreenComponent,
     
   ],
   imports: [

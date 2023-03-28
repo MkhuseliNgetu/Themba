@@ -14,7 +14,10 @@ export class SessionComponent {
 constructor() {}
 
   
-ngOnInit(): void { }
+ngOnInit(): void { 
+
+
+}
 //Bug - Causing Polyfill error
 //Also add code attrbution
 /* async AttendSession(){
