@@ -2,8 +2,8 @@ form{
     box-shadow: 2px 2px 2px 2px grey;
     background: #fff;
     border-radius: 10px;
-    width: fit-content;
-    height: fit-content;
+    width: 550px;
+    height:  350px;
   
     top: 50%;
     left: 50%;
@@ -11,7 +11,7 @@ form{
     bottom: 50%;
   
     margin-top: 75px;
-    margin-left: 750px;
+    margin-left: 675px;
     margin-right: 150px;
     margin-bottom: 150px;
   }
@@ -20,8 +20,13 @@ form{
     border-radius: 5px;
   
   }
+  label{
+    font-weight: bold;
+  }
   h1{
-
     font-family: "Montreal";
-  
+    font-size: 100px;
+  }
+  form{
+    text-align: center;
   }

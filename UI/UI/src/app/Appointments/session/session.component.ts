@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 //Media Soup Client
 import { Device } from 'mediasoup-client';
 import { Socket } from 'socket.io';
+
+//This programming statement was adapted from GitHub:
+//Link: https://github.com/helenamerk/mic-check
+//Author: BrianLi101, helenamerk, Aldredcz, binod-d
+//Author Profile Links: https://github.com/BrianLi101,https://github.com/helenamerk,https://github.com/Aldredcz,https://github.com/binod-dc
+import {MediaPermissionsError, MediaPermissionsErrorType,requestMediaPermissions} from 'mic-check';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-session',
@@ -11,13 +19,91 @@ import { Socket } from 'socket.io';
 })
 export class SessionComponent {
 
-constructor() {}
+constructor(public ReloadSession: Router) {}
 
   
 ngOnInit(): void { 
+  //This method was adapted from GitHub:
+  //Link: https://github.com/helenamerk/mic-check
+  //Author: BrianLi101, helenamerk, Aldredcz, binod-d
+  //Author Profile Links: https://github.com/BrianLi101,https://github.com/helenamerk,https://github.com/Aldredcz,https://github.com/binod-dc
+  requestMediaPermissions()
+	.then(() => {
+		alert('Patient Feed has loaded succssfully!');
+    //Video Feed Constraints
+    //This programming statement was adapted from MDN:
+    //Link: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+    //Author: MDN
+    const PatientVideoStreamConstraints = ({
+      video: {
+          facingMode: "user",
+          width: {ideal: 1280, min: 720, max: 1920},
+          height: {ideal: 720, min: 480, max: 1080},
+          framerate: {ideal: 30, min:10, max: 60}
+      },
+      audio: true,
+    })
+    
+      //Patient Feed
+      //This programming statement was adapted from MDN:
+      //Link: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+      //Author: MDN
+      let StreamOne = document.getElementById("PatientVideoFeed") as HTMLVideoElement;
+      //This programming statement was adapted from MDN:
+      //Link: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+      //Author: MDN
+      navigator.mediaDevices.getUserMedia(PatientVideoStreamConstraints).then(PatientLiveStream =>{
+       
+        StreamOne.srcObject = PatientLiveStream;
+        StreamOne.play();
+      });
+     
+	})
+	.catch((err: MediaPermissionsError) => {
+    //This programming statement was adapted from GitHub:
+    //Link: https://github.com/helenamerk/mic-check
+    //Author: BrianLi101, helenamerk, Aldredcz, binod-d
+    //Author Profile Links: https://github.com/BrianLi101,https://github.com/helenamerk,https://github.com/Aldredcz,https://github.com/binod-dc
+		const { type, name, message } = err;
+    //This programming statement was adapted from GitHub:
+    //Link: https://github.com/helenamerk/mic-check
+    //Author: BrianLi101, helenamerk, Aldredcz, binod-d
+    //Author Profile Links: https://github.com/BrianLi101,https://github.com/helenamerk,https://github.com/Aldredcz,https://github.com/binod-dc
+		if (type == MediaPermissionsErrorType.SystemPermissionDenied) {
+        alert('Session initialization failed: Your browser does not have camera and microphone permissions.');
+        alert('Please exit the application which is using your camera and micorphone.');
+        this.ReloadSession.navigate(['/ValidateSession']);
+       
+    }else if(type == MediaPermissionsErrorType.UserPermissionDenied){
+        alert('Session initialization failed: Camera and microphone permissions were denied.');
+        this.ReloadSession.navigate(['/ValidateSession']);
+       
+    }else if(type == MediaPermissionsErrorType.CouldNotStartVideoSource){
+        alert('Session initialization failed: You camera and microphone are being used by another application.');
+        alert('Please exit the application which is using your camera and micorphone.');
+        this.ReloadSession.navigate(['/ValidateSession']);
+    }else{
 
+    }
+		
+    
+})
 
 }
+
+ngOnDestroy(){
+  //This programming statement was adapted from MDN:
+  //Link: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+  //Author: MDN
+  let StreamOne = document.getElementById("PatientVideoFeed") as HTMLVideoElement;
+
+  StreamOne.onended = function(){
+
+    alert('Session has ended successfully');
+
+  }
+}
+
 //Bug - Causing Polyfill error
 //Also add code attrbution
 /* async AttendSession(){

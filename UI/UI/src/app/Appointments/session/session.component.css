@@ -9,18 +9,20 @@ table{
     bottom: 50%;
   
     margin-top: 75px;
-    margin-left: 450px;
+    margin-left: 360px;
     margin-right: 100px;
     margin-bottom: 150px;
 }
 th{
-    text-align: left;
+    text-align: center;
     padding: 15px;
     font-style: bold;
     
 }
 video{
     text-align: center;
-    padding: 90px;
-    display: inline-block;
+
+}
+div{
+    text-align: center;
 }

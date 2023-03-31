@@ -1,51 +1,22 @@
-<script>
-    function AttendSession(){
-
-    var VideoStream = document.createElement('video');
-    const PreferedVideoType = 'mp4';
-    const PreferedCodecType = 'avc1.4D401E,mp4a.40.2'
-    const IsMyCameraSupported = VideoStream.canPlayType(PreferedVideoType+';codecs="'+PreferedCodecType+'"');
-
-    if(IsMyCameraSupported){
-
-    alert('My stream is supported');
-    }else{
-
-    alert('My stream is not supported');
-    }
-
-
-    }
-</script>
-
-<div id="Session" style="text-align:center" onload="AttendSession()">
+<div id="Session">
 
     <table>
     
     <thead>
         <th>Patient</th>
-        <th>Counselor</th>
     </thead>
     
     <tbody>
     <tr>
-        <video id="PatientVideoFeed" width="600" height="600" controls="controls">
-
-            <source type="video/mp4" src="assets/Placeholder Videos/DVD Logo Hits Corner.mp4" >
-        </video>
-        
-        <video id="CounselorVideoFeed" width="600" height="600" controls="controls">
-          
-            <source type="video/mp4" src="assets/Placeholder Videos/DVD Logo Hits Corner.mp4" >
-        </video>
+    <video id="PatientVideoFeed" autoplay style="display: inline-block;"></video>
     </tr>
     </tbody>
    
     </table>
-
-
+    
 
 </div>
+
     <!--Page has safely loaded toast-->
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="PageLoadedToastDemo">
       <div class="toast-header">
@@ -54,12 +25,11 @@
       </div>
       <div class="toast-body">
         Session has loaded successfully!
-      </div>
-  
     </div>
+  
 
 
-<script>
+<!--<script>
     //This following 4 programming statements were adapted from 
     //Link: https://www.goranstimac.com/blog/how-to-add-bootstrap-5-toast-on-page-load/
     //Author: Goran Štimac
@@ -68,5 +38,5 @@
     let SuccessfulToast = new bootstrap.Toast(SuccessfulLoadToast);
     SuccessfulToast.show();
     }
-</script>
+</script>-->
 

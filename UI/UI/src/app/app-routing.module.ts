@@ -8,6 +8,7 @@ import { PoliceReportComponent } from './Police-Report/police-report/police-repo
 import { SessionComponent } from './Appointments/session/session.component';
 import { ValidateSessionComponent } from './Appointments/validate-session/validate-session.component';
 import { LoadingScreenComponent } from './loading/loading-screen/loading-screen.component';
+import { AboutComponent } from './About Us/about.component';
 
 const ThembaRoutes: Routes = [
 {path:'Register', component: RegisterComponent},
@@ -16,7 +17,8 @@ const ThembaRoutes: Routes = [
 {path:'Report', component: PoliceReportComponent},
 {path:'Session', component: SessionComponent},
 {path:'ValidateSession', component: ValidateSessionComponent},
-{path:'Loading', component: LoadingScreenComponent}
+{path:'Loading', component: LoadingScreenComponent},
+{path:'About', component: AboutComponent}
 ];
 
 @NgModule({

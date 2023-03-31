@@ -8,18 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'Themba';
-  SuccessfulLoad! : boolean;
 
   constructor() {}
 
   ngOnInit(): void {
-    this.SuccessfulLoad = true;
-    throw new Error('Method not implemented.');
+  
   }
-
-  OnSuccessfulLoad(): any {
 
   
-
-  }
 }

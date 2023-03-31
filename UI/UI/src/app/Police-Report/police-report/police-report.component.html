@@ -1,11 +1,11 @@
-<div id="PoliceReports" style="text-align:center">
+<div id="PoliceReports">
 
         <h1>File Affidavit</h1>
         
         <form enctype="multipart/form-data" (ngSubmit)="PoliceReports(NewReport)" #NewReport="ngForm">
        
 
-            <label><b>ID</b></label>
+            <label>ID</label>
             <br/>
             <input type="text" ngModel name="SuppliedPatientIdenticationNumber" #SuppliedPatientIdenticationNumber="ngModel" placeholder="Enter your ID number here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="13"/>
@@ -13,14 +13,14 @@
             <br/>
 
 
-            <label><b>Name</b></label>
+            <label>Name</label>
             <br/>
             <input type="text" ngModel name="SuppliedPatientName" #SuppliedPatientName="ngModel" placeholder="Enter your name here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
             <div *ngIf="SuppliedPatientName.invalid && (SuppliedPatientName.dirty || SuppliedPatientName.touched)" style="color: red;">*A username is required to proceed.</div>
             <br/>
 
-            <label><b>Surname</b></label>
+            <label>Surname</label>
             <br/>
             <input type="text" ngModel name="SuppliedPatientSurname" #SuppliedPatientSurname="ngModel" placeholder="Enter your surname here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
@@ -28,17 +28,17 @@
             <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)" style="color: red;">*Password cannot be left empty!</div>
             <br/>
 
-            <label><b>Date</b></label>
+            <label>Date</label>
             <br/>
             <input type="datetime-local" ngModel name="SuppliedPatientDateAndTime" #SuppliedPatientDateAndTime="ngModel" required/>
             <br/>
             <div *ngIf="SuppliedPatientDateAndTime.invalid" style="color: red;">*Date and time of the event must be supplied to proceed</div>
             <br/>
 
-            <label><b>Description</b></label>
+            <label>Description</label>
             <br/>
             <textarea ngModel name="SuppliedDescription" #SuppliedDescription="ngModel"  
-            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" cols="40" required>Enter the description of the event here</textarea>
+            pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" cols="45" required>Enter the description of the event here</textarea>
             <br/>
             <div *ngIf="SuppliedDescription.invalid && (SuppliedDescription.dirty || SuppliedDescription.touched)" style="color: red;">*The description of the event cannot be left empty!</div>
             <br/>

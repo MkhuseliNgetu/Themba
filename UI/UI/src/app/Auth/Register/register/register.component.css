@@ -2,8 +2,8 @@ form{
     box-shadow: 2px 2px 2px 2px grey;
     background: #fff;
     border-radius: 10px;
-    width: fit-content;
-    height: fit-content;
+    width: 350px;
+    height:  220px;
   
     top: 50%;
     left: 75%;
@@ -11,17 +11,21 @@ form{
     bottom: 75%;
   
     margin-top: 75px;
-    margin-left: 850px;
+    margin-left: 790px;
     margin-right: 150px;
     margin-bottom: 150px;
   }
-  input{
-  
+  input{  
     border-radius: 5px;
-  
   }
   h1{
-
     font-family: "Montreal";
-  
+    text-align: center;
+    font-size: 100px;
+  }
+  form{
+    text-align: center;
+  }
+  label{
+    font-weight: bold;
   }

@@ -1,11 +1,12 @@
-body{
-    padding-top: 100px;
-}
 div{
 
     text-align: center;
 }
 h1{
     font-family: "Montreal";
-    font-size: xx-large;
+    font-size: 100px;
 }
+q{
+    size: 16px;
+}
+

@@ -1,25 +1,25 @@
-<div id="Validate Session" style="text-align:center">
+<div id="Validate Session">
 
     <h1>Find Your Session</h1>
     
     <form enctype="multipart/form-data" (ngSubmit)="FindASession(MySession)" #MySession="ngForm">
    
 
-        <label><b>ID</b></label>
+        <label>ID</label>
         <br/>
         <input type="text" ngModel name="SuppliedSessionIdenticationNumber" #SuppliedSessionIdenticationNumber="ngModel" placeholder="Enter your ID number here"  
         pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="13"/>
         <div *ngIf="SuppliedSessionIdenticationNumber.invalid && (SuppliedSessionIdenticationNumber.dirty || SuppliedSessionIdenticationNumber.touched)" style="color: red;">*Your ID number is required to proceed.</div>
         <br/>
         
-        <label><b>Name</b></label>
+        <label>Name</label>
         <br/>
         <input type="text" ngModel name="SuppliedPatientName" #SuppliedPatientName="ngModel" placeholder="Enter your name here"  
         pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
         <div *ngIf="SuppliedPatientName.invalid && (SuppliedPatientName.dirty || SuppliedPatientName.touched)" style="color: red;">*A username is required to proceed.</div>
         <br/>
 
-        <label><b>Surname</b></label>
+        <label>Surname</label>
         <br/>
         <input type="text" ngModel name="SuppliedPatientSurname" #SuppliedPatientSurname="ngModel" placeholder="Enter your surname here"  
         pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
@@ -27,7 +27,7 @@
         <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)" style="color: red;">*Password cannot be left empty!</div>
         <br/>
 
-        <label><b>Date</b></label>
+        <label>Date</label>
         <br/>
         <input type="datetime-local" ngModel name="SuppliedSessionDateAndTime" #SuppliedSessionDateAndTime="ngModel" required/>
         <br/>

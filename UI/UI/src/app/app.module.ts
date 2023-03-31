@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ErrorComponent } from './Error/error/error.component';
 import { ErrorInterceptor } from './Error/error.interceptor';
 import { LoadingScreenComponent } from './loading/loading-screen/loading-screen.component';
+import { AboutComponent } from './About Us/about.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { LoadingScreenComponent } from './loading/loading-screen/loading-screen.
     ErrorComponent,
     ValidateSessionComponent,
     LoadingScreenComponent,
+    AboutComponent,
     
   ],
   imports: [

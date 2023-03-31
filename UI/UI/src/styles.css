@@ -23,9 +23,10 @@ nav{
     text-align: center;
 
 }
-p{
-    font-family: "Montreal";
 
+h1{
+    font-family: "Montreal";
+    font-size: xx-large;
 }
 footer{
     position: fixed;
@@ -36,4 +37,11 @@ footer{
     border-top-left-radius: 10px;
     box-shadow: 2px 2px 2px 2px grey;
     background: #fff;
+    font-family: "Montreal";
+    
 }
+link{
+
+    border-radius: 50%;
+}
+
