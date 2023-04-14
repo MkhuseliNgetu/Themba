@@ -6,11 +6,18 @@ const ReportStorage = require('../DataWarehouse/PoliceReports')
 //Address
 const FilePoliceReport ='/Report'
 
+
+//Security 
+var ThembaProtection = require('express-brute');
+var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
+var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
+
+
 //Patient - Filing A Police Report 
 Router.post(FilePoliceReport,(res,req)=>{
 
-;
-
+    ThembaDDOSProtect.prevent;
+    
     //Format Supplied Date
     //This programming statement was adapted from Momentjs:
     //Link: https://momentjs.com/

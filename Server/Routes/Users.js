@@ -5,10 +5,9 @@ const Router = Express.Router();
 const UserStorage = require('../DataWarehouse/Users')
 const AppointmentStorage = require('../DataWarehouse/Appointments')
 //Encyption
-const Bcrypt = require('bcrypt')
+const Bcrypt = require('bcrypt');
 //Authorisation
 const JWT = require('jsonwebtoken');
-const { router } = require('../app');
 const VerifyUser = require('../Verify-User')
 //Addesses
 const RegisterCounselors = '/Register'
@@ -16,42 +15,49 @@ const LoginCounselors = '/Login'
 const CounselorDashboard = '/Dashboard'
 const CounselorAppointmentsUpdate = '/UpdateAppointments'
 
+//Security 
+var ThembaProtection = require('express-brute');
+var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
+var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
+
+
 //Registration - Counselors
-Router.post(RegisterCounselors,(res,req)=>{
+Router.post(RegisterCounselors, async(res,req)=>{
 
-    Bcrypt.hash(req.body.Passcode, 10).then(SafePasscode=>{
+ThembaDDOSProtect.prevent;
 
-        const NewCounselor = new UserStorage({Username: req.body.Username, Password: SafePasscode});
+    const RoundsOfSalt = 10;
 
-        UserStorage.findOne({Username: req.body.Username}, function(err, FoundUser){
+    var ScrambledPasscode = Bcrypt.hash(req.body.Passcode,RoundsOfSalt);
 
-            if(FoundUser){
+    const NewCounselor = new UserStorage({Username: req.body.Username, Passcode: ScrambledPasscode });
 
-                    res.status(409).json({Message: 'Error: Registration Failed.' + "\n"+ 'This user already exists'});
-            }else{
-                    NewCounselor.save().then(CounselorOutcome =>{
-                        res.status(201).json({Message: 'Registration successful.', Counselor:  CounselorOutcome});
-                    })
-            }
+    var IndexedCounselor = await UserStorage.findOne({Username: req.body.Username});
+
+    if(IndexedCounselor){
+
+        res.status(409).json({Message: 'Error: Registration Failed: This user already exists'});
+    }else{
+        NewCounselor.save().then(CounselorOutcome =>{
+            res.status(201).json({Message: 'Registration successful.', Counselor:  CounselorOutcome.Passcode});
         })
-
-
-    });
-
-
+    }
 })
 //Login - Counselors
-Router.post(LoginCounselors, (res,req)=>{
+Router.post(LoginCounselors, async(res,req)=>{
 
-let existingcounselor;
+ThembaDDOSProtect.prevent;
+
+let existingcounselor
 
     UserStorage.findOne({Username: req.body.Username}).then(ExistingUser=>{
 
-        if(!ExistingUser){
-
+        if(ExistingUser){
+           
             return res.status(401).json({Message: 'Authentication failed.'});
         }else{
 
+            
             existingcounselor = ExistingUser;
             return Bcrypt.compare(req.body.Passcode,existingcounselor.Passcode)
         }
@@ -70,7 +76,7 @@ let existingcounselor;
 
     }).catch(err=>{
 
-        res.status(401).json({Message: 'Error: Login unsuccessful' + "\n"+ 'Incorrect username/password'});
+        return res.status(401).json({Message: 'Error: Login unsuccessful' + "\n"+ 'Incorrect username/password'});
 
     });
 
@@ -79,6 +85,7 @@ let existingcounselor;
 //Dashboard - Counselors - View upcomming sessions
 Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
 
+ThembaDDOSProtect.prevent;
 
     Appointments.find({}, function(err, AllAppointments){
 
@@ -96,6 +103,7 @@ Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
 //Update Appointments
 Router.patch(CounselorAppointmentsUpdate, VerifyUser,(res,req)=>{
 
+ThembaDDOSProtect.prevent;
 
     AppointmentStorage.findOneAndRemove({ID:req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
 

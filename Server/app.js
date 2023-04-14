@@ -38,9 +38,22 @@ Mongoose.connect(ConToCloudStorage).then(() => {console.log('Cloud Storage (Mong
 
 //Security
 //Passcode Encryption
-const Bcrypt = require('bcrypt')
+const Bcrypt = require('bcrypt');
 
 App.use(Express.json())
+
+//CORS
+const CORS = require('cors')
+
+App.use((req,res, next)=>{
+
+    res.setHeader('Acess-Control-Allow-Origin',"*");
+    res.setHeader('Access-Control-Allow-Origin','Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.setHeader('Access-Control-Allow-Methods','*');
+    next();
+});
+
+App.use(CORS())
 
 //DDOS Mitigations
 var ThembaProtection = require('express-brute');
@@ -61,14 +74,7 @@ var LogFileLocation = require('path');
 App.use(UserRequestLogger('Backend', {Skip: function(UserRequest, UserResponse) {return UserResponse < 400}}))
 App.use(UserRequestLogger('common',{RequestData: fs.createReadStream(LogFileLocation.join(__dirname, 'UserRequests.log'), {flags: 'a'})}))
 
-//CORS
-App.use((req,res, next)=>{
 
-    res.setHeader('Acess-Control-Allow-Origin',"*");
-    res.setHeader('Access-Control-Allow-Origin','Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.setHeader('Access-Control-Allow-Methods','*');
-    next();
-});
 
 
 //WebRTC 
@@ -134,35 +140,30 @@ App.post(Controller + FilePoliceReport, (req,res)=>{
 
 })
 //Registration - Counselors
-App.post(Controller + RegisterCounselors,(req,res)=>{
+App.post(Controller + RegisterCounselors, async(req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
     const NewCounselors = new Counselors({ Username: req.body.Username, Passcode: req.body.Passcode});
    
+    var IndexedCounselor = await Counselors.findOne({Username: req.body.Username});
 
-    Counselors.findOne({Username: req.body.Username}, function(err, result){
-
-
-        if(result){
+    if(IndexedCounselor){
 
            
-                res.status(409).json({Message: 'Registration Failed.' + "\n"+ 'This user already exists'})
-        }else{
+        res.status(409).json({Message: 'Registration Failed: This user already exists'})
+    }else{
 
-                NewCounselors.save().then(() =>{
-                res.status(201).json({Message: 'Registration successful.'})
-                })
-                
+        NewCounselors.save().then(()=>{
+        res.status(201).json({Message: 'Registration successful.'})
+    })
+        
 
-        }
-
-    });
-
+}
 })
 //Login - Counselors
-App.post(Controller + LoginCounselors,(req,res)=>{
+App.post(Controller + LoginCounselors,async (req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -172,10 +173,14 @@ App.post(Controller + LoginCounselors,(req,res)=>{
 
         Bcrypt.compare(req.body.Passcode, FoundCounselor.Passcode, (err, EncryptionOutcome)=>{
 
-            if(EncryptionOutcome){
+            switch(EncryptionOutcome){
+               
+               case true:
                 res.status(201).json({Message: 'Login successful', Token: token});
-            }else{
+               break;
+               case false:
                 res.status(401).json({Message: 'Login Failed'});
+               break;
             }
                 
         })

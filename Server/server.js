@@ -13,6 +13,8 @@ const Server = HTTP.createServer({
 },App);
 
 
+Server.listen(RequiredPort)
+
 //Signaling Server from Video Conferencing
 //This programming statement was adapted from Vegibit:
 //Link: https://vegibit.com/nodejs-webrtc-signalling-server/
@@ -33,4 +35,3 @@ SignalServer.on('Connection',(Socket) =>{
 });
 
 
-Server.listen(RequiredPort)

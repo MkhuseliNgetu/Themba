@@ -7,7 +7,15 @@ const AppointmentStorage = require('../DataWarehouse/Appointments')
 const AttendSession = '/Session'
 const ValidateSession = '/ValidateSession'
 
+//Security 
+var ThembaProtection = require('express-brute');
+var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
+var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
+
+
 Router.post(AttendSession, (res,req)=>{
+        
+ThembaDDOSProtect.prevent;
 
  //Get Name and contact details of patient 
  AppointmentStorage.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime}, function(err, FoundAppointment){
@@ -21,10 +29,13 @@ Router.post(AttendSession, (res,req)=>{
     break;
     }
 
-});
+ });
+
 })
 //Checking whether the patient's book session is valid
 Router.post(ValidateSession, (req, res)=>{
+
+ThembaDDOSProtect.prevent;
 
 //Get Name and contact details of patient 
 AppointmentStorage.findOne({ID: req.body.ID, DayAndTime: req.body.DayAndTime}, function(err, FoundAppointment){
@@ -41,4 +52,5 @@ if(FoundAppointment){
    });
     
 })
+
 module.exports = Router;
