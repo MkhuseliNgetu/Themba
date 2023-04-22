@@ -56,3 +56,10 @@ content-type: application/json
     "DayAndTime": "2023-05-09 15:00"
 
 }
+###
+POST https://localhost:3000/Themba/Session HTTP/1.1
+content-type: application/json 
+
+{
+    
+}
