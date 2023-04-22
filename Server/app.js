@@ -74,13 +74,62 @@ var LogFileLocation = require('path');
 App.use(UserRequestLogger('Backend', {Skip: function(UserRequest, UserResponse) {return UserResponse < 400}}))
 App.use(UserRequestLogger('common',{RequestData: fs.createReadStream(LogFileLocation.join(__dirname, 'UserRequests.log'), {flags: 'a'})}))
 
+//WebRTC
 
+const ServerOne = App.listen(4000, function(connection, disconnected){});
+
+//Signaling Server from Video Conferencing
+//This programming statement was adapted from Vegibit:
+//Link: https://vegibit.com/nodejs-webrtc-signalling-server/
+//Author: Vegibit
+const SignalServer = require('socket.io')(ServerOne);
+
+SignalServer.emit("connection", function SnakeEater(){
+
+    console.log('Socket.io server is online', ServerOne.address())
+
+
+});
+
+//Signaling Server from Video Conferencing
+//This programming statement was adapted from Vegibit:
+//Link: https://vegibit.com/nodejs-webrtc-signalling-server/
+//Author: Vegibit
+SignalServer.on("connection", function OpenSesssion(err, Socket){
+
+    //For Connection
+    console.log('Your connection to the Socket.io server has been started sucessfully!', ServerOne.address())
+
+    Socket.on('Join-Session', function PatientSession(PatientID, RoomID){
+
+        //Patient/Counselor Joins the session
+        Socket.join(RoomID)
+
+        //Telling everyone in the session that a user has joined the session
+        Socket.to(RoomID).emit('user-joined', RoomID)
+
+        //For Disconnection
+
+        //Signaling Server from Video Conferencing
+        //This programming statement was adapted from Vegibit:
+        //Link: https://vegibit.com/nodejs-webrtc-signalling-server/
+        //Author: Vegibit
+        SignalServer.on("disconnect", function CloseSession(){
+
+        console.log('Socket.io server is offline', ServerOne.address())
+
+         //Telling everyone in the session that a user has left the session
+         Socket.to(RoomID).emit('user-left', PatientID)
+        });
+    })
+
+    
+});
 
 
 //WebRTC 
 //Attending a counseling session
-App.get(Controller+AttendSession, (req, res)=>{
-
+App.post(Controller+AttendSession, (req, res)=>{
 
 
 })
