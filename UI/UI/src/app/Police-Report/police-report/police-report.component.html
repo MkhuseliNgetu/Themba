@@ -24,12 +24,14 @@
             <br/>
             <input type="text" ngModel name="SuppliedPatientSurname" #SuppliedPatientSurname="ngModel" placeholder="Enter your surname here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
+            <br/>
             <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)" style="color: red;">*Password cannot be left empty!</div>
             <br/>
 
             <label>Date</label>
             <br/>
             <input type="datetime-local" ngModel name="SuppliedPatientDateAndTime" #SuppliedPatientDateAndTime="ngModel" required/>
+            <br/>
             <div *ngIf="SuppliedPatientDateAndTime.invalid" style="color: red;">*Date and time of the event must be supplied to proceed</div>
             <br/>
 
@@ -37,6 +39,7 @@
             <br/>
             <textarea ngModel name="SuppliedDescription" #SuppliedDescription="ngModel"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" cols="45" required>Enter the description of the event here</textarea>
+            <br/>
             <div *ngIf="SuppliedDescription.invalid && (SuppliedDescription.dirty || SuppliedDescription.touched)" style="color: red;">*The description of the event cannot be left empty!</div>
             <br/>
 

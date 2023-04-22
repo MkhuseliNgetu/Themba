@@ -23,12 +23,14 @@
         <br/>
         <input type="text" ngModel name="SuppliedPatientSurname" #SuppliedPatientSurname="ngModel" placeholder="Enter your surname here"  
         pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
+        <br/>
         <div *ngIf="SuppliedPatientSurname.invalid && (SuppliedPatientSurname.dirty || SuppliedPatientSurname.touched)" style="color: red;">*Password cannot be left empty!</div>
         <br/>
 
         <label>Date</label>
         <br/>
         <input type="datetime-local" ngModel name="SuppliedSessionDateAndTime" #SuppliedSessionDateAndTime="ngModel" required/>
+        <br/>
         <div *ngIf="SuppliedSessionDateAndTime.invalid" style="color: red;">*Date and time of the session must be supplied to proceed</div>
         <br/>
 
