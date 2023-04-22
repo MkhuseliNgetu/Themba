@@ -8,7 +8,6 @@
             <br/>
             <input type="text" ngModel name="SuppliedCounselorUsername" #SuppliedCounselorUsername="ngModel" placeholder="Enter your username here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="8"/>
-            <br/>
             <div *ngIf="SuppliedCounselorUsername.invalid && (SuppliedCounselorUsername.dirty || SuppliedCounselorUsername.touched)" style="color: red;">*A username is required to proceed.</div>
             <br/>
 
@@ -16,7 +15,6 @@
             <br/>
             <input type="password" ngModel name="SuppliedCounselorPasscode" #SuppliedCounselorPasscode="ngModel" placeholder="Enter your password here"  
             pattern="^[\w-\.}+@([\w-]+\.)+[\w-]{2,4}$" required minlength="6"/>
-            <br/>
             <div *ngIf="SuppliedCounselorPasscode.invalid && (SuppliedCounselorPasscode.dirty || SuppliedCounselorPasscode.touched)" style="color: red;">*Password cannot be left empty!</div>
             <br/>
             
