@@ -8,7 +8,7 @@ const PoliceReportStucture = Mongoose.Schema(
     Surname: {type: String, required: true},
     DayAndTime: {type: Date, required: true},
     Description: {type: String, required: true}
-   
+    //OfficerSignature: {type: Image, required: false} //For now (Beta Phase), its not required.
 }
 
 )
