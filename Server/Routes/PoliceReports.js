@@ -1,11 +1,10 @@
-const Express = require('express')
-const Router = Express.Router();
+const express = require('express')
+const router = express.Router();
 
 //Cloud Storage
 const ReportStorage = require('../DataWarehouse/PoliceReports')
 //Address
 const FilePoliceReport ='/Report'
-
 
 //Security 
 var ThembaProtection = require('express-brute');
@@ -14,10 +13,18 @@ var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
 
 
 //Patient - Filing A Police Report 
-Router.post(FilePoliceReport,(res,req)=>{
+router.post(FilePoliceReport,async (req,res)=>{
 
     ThembaDDOSProtect.prevent;
+
+    //Report Number Generation:
+    const ReportNoPrefix = 'RT-';
+
+    const StartingPoint = 999;
     
+    const EndPoint = 100000;
+
+    const ReportNo = ReportNoPrefix + Math.floor(Math.random() * StartingPoint + EndPoint).toString();    
     //Format Supplied Date
     //This programming statement was adapted from Momentjs:
     //Link: https://momentjs.com/
@@ -32,20 +39,24 @@ Router.post(FilePoliceReport,(res,req)=>{
         Surname: req.body.Surname,
         DayAndTime: ReportDate(req.body.DayAndTime).format('DD/MMM/YYYY'),
         Description: req.body.Description,
-        OfficerSignature: req.body.OfficerSignature})
+        ReportNo: ReportNo});
 
-    PoliceReports.findOne({ID: req.body.ID}, function(err, result){
-        if(result){
+    var FinialisedPoliceReports = await ReportStorage.findOne({ID: req.body.ID}).exec();
 
-        res.status(409).json({Message: 'Error: Police Report has not been filed successfully.' + "\n"+ 'This report already exists'});
-        }else{
-        PoliceReport.save()
-        res.status(201).json({Message: 'Your Police Report has been filed successfully.', PoliceReport, Reminder: 'Please keep your case number to follow-up on you case' });
-        }
+    if(FinialisedPoliceReports){
+
+        res.status(409).json({Message: 'Error: Police Report has not been filed successfully.'});
+        
+    }else{
+
+        PoliceReport.save().then(ReportOutcome=>{
+            res.status(201).json({Message: 'Your Police Report has been filed successfully.', ReportNo, Reminder: 'Please keep your case number to follow-up on you case' });
+        })
+        
+    }
                 
 
 
-    });
-})
+});
 
-module.exports = Router;
+module.exports = router;

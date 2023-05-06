@@ -1,20 +1,22 @@
+//Report Related Functions - Reserved For Patients
 POST https://localhost:3000/Themba/Report HTTP/1.1
 content-type: application/json
 
 {
-    "ID": "Solid8",
+    "ID": "Solid11",
     "Name": "Renton",
     "Surname": "Foss",
-    "DayAndTime": "15 March 2023",
+    "DayAndTime": "19 March 2023 19:00",
     "Description": "Testing Statement 1"
 
 }
+//User Related Functions - Reserved For Counselors
 ###
 POST https://localhost:3000/Themba/Register HTTP/1.1
 content-type: application/json
 
 {
-    "Username": "SnakeEater97",
+    "Username": "BobbyTen",
     "Passcode": "L@mbert_7835$#"
 }
 ###
@@ -22,13 +24,13 @@ POST https://localhost:3000/Themba/Login HTTP/1.1
 content-type: application/json
 
 {
-    "Username": "SnakeEater97",
+    "Username": "BobbyTen",
     "Passcode": "L@mbert_7835$#"
 }
+//Appointment Related Functions - Reserved For Counselors
 ###
 GET https://localhost:3000/Themba/Dashboard HTTP/1.1
 content-type: application/json
-Authorization: Bearer
 
 {
 
@@ -36,30 +38,22 @@ Authorization: Bearer
 ###
 PATCH https://localhost:3000/Themba/UpdateAppointments HTTP/1.1
 content-type: application/json
-Authorization: Bearer
 
 {
-    "ID": "Solid8",
-    "Name": "Renton",
-    "Surname": "Foss",
-    "DayAndTime": "15 March 2023",
-    "Description": "Testing Statement 1"
+    "ID": "PT-51178813",
+    "Name": "Michael",
+    "Surname": "Von Pierre",
+    "DayAndTime": "18 March 2023 15:00"
 }
+//Appointment Related Functions - Reserved For Counselors & Patients
 ###
 POST https://localhost:3000/Themba/ValidateSession HTTP/1.1
 content-type: application/json 
 
 {
-    "ID":"Revolver Ocelot",
-    "Name":"ACDP",
-    "Surname":"Foss96",
-    "DayAndTime": "2023-05-09 15:00"
+    "ID":"PT-51178812",
+    "Name":"Michael",
+    "Surname":"Von Pierre",
+    "DayAndTime": "18 March 2023 15:00"
 
-}
-###
-POST https://localhost:3000/Themba/Session HTTP/1.1
-content-type: application/json 
-
-{
-    
 }

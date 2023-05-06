@@ -7,7 +7,8 @@ const PoliceReportStucture = Mongoose.Schema(
     Name: {type: String, required: true},
     Surname: {type: String, required: true},
     DayAndTime: {type: Date, required: true},
-    Description: {type: String, required: true}
+    Description: {type: String, required: true},
+    ReportNo: {type: String, required: true}
    
 }
 

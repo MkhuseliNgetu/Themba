@@ -1,50 +1,49 @@
-const Express = require('express')
-const Router = Express.Router();
+const express = require('express');
+const router = express();
 
 //Cloud Storage
 const UserStorage = require('../DataWarehouse/Users')
-const AppointmentStorage = require('../DataWarehouse/Appointments')
 //Encyption
 const Bcrypt = require('bcrypt');
 //Authorisation
 const JWT = require('jsonwebtoken');
-const VerifyUser = require('../Verify-User')
+
 //Addesses
 const RegisterCounselors = '/Register'
 const LoginCounselors = '/Login'
-const CounselorDashboard = '/Dashboard'
-const CounselorAppointmentsUpdate = '/UpdateAppointments'
 
 //Security 
 var ThembaProtection = require('express-brute');
-var ThembaDataWarehouse =  new ThembaProtection.MemoryStore();
+var ThembaDataWarehouse = new ThembaProtection.MemoryStore();
 var ThembaDDOSProtect = new ThembaProtection(ThembaDataWarehouse);
 
-
 //Registration - Counselors
-Router.post(RegisterCounselors, async(res,req)=>{
+router.post(RegisterCounselors, async(req,res, next)=>{
 
 ThembaDDOSProtect.prevent;
 
     const RoundsOfSalt = 10;
 
-    var ScrambledPasscode = Bcrypt.hash(req.body.Passcode,RoundsOfSalt);
+    var ScrambledPasscode = await Bcrypt.hash(req.body.Passcode,RoundsOfSalt);
 
     const NewCounselor = new UserStorage({Username: req.body.Username, Passcode: ScrambledPasscode });
 
-    var IndexedCounselor = await UserStorage.findOne({Username: req.body.Username});
+    var IndexedCounselor = await UserStorage.findOne({Username: req.body.Username}).exec();
 
     if(IndexedCounselor){
 
         res.status(409).json({Message: 'Error: Registration Failed: This user already exists'});
     }else{
-        NewCounselor.save().then(CounselorOutcome =>{
-            res.status(201).json({Message: 'Registration successful.', Counselor:  CounselorOutcome.Passcode});
+       await NewCounselor.save().then(() =>{
+            res.status(201).json({Message: 'Registration successful.'});
+            
         })
     }
+    
+    next()
 })
 //Login - Counselors
-Router.post(LoginCounselors, async(res,req)=>{
+router.post(LoginCounselors, async(req,res)=>{
 
 ThembaDDOSProtect.prevent;
 
@@ -80,42 +79,9 @@ let existingcounselor
 
     });
 
-})
+});
 
-//Dashboard - Counselors - View upcomming sessions
-Router.get(CounselorDashboard, VerifyUser,(res,req)=>{
 
-ThembaDDOSProtect.prevent;
-
-    Appointments.find({}, function(err, AllAppointments){
-
-        if(AllAppointments){
-            res.status(200).send(AllAppointments,array.forEach(element => {
-                JSON.stringify(element)
-            }));
-
-        }else{
-            res.status(404).send({Message: 'Appointment(s) unavailable'});
-        }
-    });
-
-})
-//Update Appointments
-Router.patch(CounselorAppointmentsUpdate, VerifyUser,(res,req)=>{
-
-ThembaDDOSProtect.prevent;
-
-    AppointmentStorage.findOneAndRemove({ID:req.body.ID, Name: req.body.Name, Surname: req.body.Surname, DayAndTime: req.body.DayAndTime}, function(err, Appointment){
-
-        if(Appointment){
-
-            res.status(200).send({Message: 'Appointments have been updated successfully'});
-        }else{
-            res.status(404).send({Message: 'Appointments have not been updated successfully'});
-        }
-    });
-
-})
     
 
-module.exports = Router;
+module.exports = router;

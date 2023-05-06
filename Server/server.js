@@ -1,7 +1,6 @@
 const HTTP = require('https');
 const App = require('./app');
 const fs = require('fs');
-const { Socket } = require('socket.io');
 
 const RequiredPort = 3000
 

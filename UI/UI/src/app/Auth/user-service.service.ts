@@ -14,7 +14,7 @@ export class UserServiceService {
   RegistrationService(CounselorUsername: String, CounselorPasscode: String): any {
 
     this.HTTP.post<{Message: String}>('https://localhost:3000/Themba/Register',
-    {Username:CounselorUsername, Password: CounselorPasscode})
+    {Username:CounselorUsername, Passcode: CounselorPasscode})
     .pipe(retry(2),catchError(this.ServerError))
     .subscribe(RegistrationStatus => {alert(RegistrationStatus.Message)})
   }
