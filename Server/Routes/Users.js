@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express();
+const router = express.Router();
 
 //Cloud Storage
 const UserStorage = require('../DataWarehouse/Users')
@@ -9,7 +9,7 @@ const Bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
 
 //Addesses
-const RegisterCounselors = '/Register'
+const RegisterCounselors = 'Register'
 const LoginCounselors = '/Login'
 
 //Security 
@@ -34,14 +34,14 @@ ThembaDDOSProtect.prevent;
 
         res.status(409).json({Message: 'Error: Registration Failed: This user already exists'});
     }else{
-       await NewCounselor.save().then(() =>{
+
+       NewCounselor.save().then(()=>{
             res.status(201).json({Message: 'Registration successful.'});
-            
+           
         })
     }
-    
-    next()
-})
+});
+
 //Login - Counselors
 router.post(LoginCounselors, async(req,res)=>{
 
@@ -49,7 +49,7 @@ ThembaDDOSProtect.prevent;
 
 let existingcounselor
 
-    UserStorage.findOne({Username: req.body.Username}).then(ExistingUser=>{
+  var IndexedCounselor = await UserStorage.findOne({Username: req.body.Username}).then(ExistingUser=>{
 
         if(ExistingUser){
            

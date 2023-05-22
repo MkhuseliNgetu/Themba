@@ -1,10 +1,8 @@
 const express = require('express');
-const app = express()
-const router = express.Router();
+const app = express();
 
 //Controller
 const Controller = '/Themba'
-const AttendSession = '/Session'
 const ValidateSession = '/ValidateSession'
 const FilePoliceReport  = '/Report'
 const RegisterCounselors = '/Register'
@@ -31,7 +29,7 @@ const fs = require('fs')
 const url = require('inspector')
 const certificate =  fs.readFileSync('SSL/TCertificate.pem')
 const option = {Server: {SSLCA: certificate}};
-const ConToCloudStorage = 'mongodb+srv://Mngetu:vRU6kK3F4c39MAZ@cluster0.vwavmzr.mongodb.net/?retryWrites=true&w=majority'
+const ConToCloudStorage = 'mongodb+srv://MNgetu83:Om2yuWs6aWcsCar4@cluster0.vwavmzr.mongodb.net/?retryWrites=true&w=majority'
 //This programming statement was adapted from Mozilla Developer:
 //Link: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose
 //Author: Mozilla
@@ -127,12 +125,9 @@ SignalServer.on("connection", function OpenSesssion(err, Socket){
     
 });
 
-//WebRTC 
-//Attending a counseling session
-app.post(Controller+AttendSession, async(req, res)=>{
 
 
-})
+
 //Checking whether the patient's book session is valid
 app.post(Controller+ValidateSession, async (req, res)=>{
 
@@ -156,7 +151,7 @@ if(AppointmentLookup){
         res.status(409).json({Message: 'Error: Session could not be loaded, this appointment could not be found.'});
 }
 
-})
+});
 
 //Patient - Filing A Police Report 
 app.post(Controller+FilePoliceReport, async (req,res)=>{
@@ -174,12 +169,10 @@ app.post(Controller+FilePoliceReport, async (req,res)=>{
         res.status(201).json({Message: 'Your Police Report has been filed successfully.',Reminder: 'Please keep your case number to follow-up on you case' });
               
     }
-          
-    
-
-})
+        
+});
 //Registration - Counselors
-app.post(Controller+RegisterCounselors, async(req,res)=>{
+app.post(RegisterCounselors, async(req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
@@ -190,35 +183,37 @@ app.post(Controller+RegisterCounselors, async(req,res)=>{
         res.status(409).json({Message: 'Registration Failed: This user already exists'})
     }else{
         res.status(201).json({Message: 'Registration successful.'})
+
+        
     }
-})
+});
 //Login - Counselors
 app.post(Controller+LoginCounselors,async (req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-    Counselors.findOne({Username:req.body.Username}, function(err, FoundCounselor) {
+   var IndexedCounselor = await Counselors.findOne({Username:req.body.Username}).exec();
         
 
-        Bcrypt.compare(req.body.Passcode, FoundCounselor.Passcode, (err, EncryptionOutcome)=>{
+   if(IndexedCounselor){
 
-            switch(EncryptionOutcome){
-               
-               case true:
-                res.status(201).json({Message: 'Login successful', Token: token});
-               break;
-               case false:
-                res.status(401).json({Message: 'Login Failed'});
-               break;
-            }
-                
-        })
-        
- 
-    });
+    Bcrypt.compare(req.body.Passcode, IndexedCounselor.Passcode, (err, EncryptionOutcome)=>{
 
-})
+        switch(EncryptionOutcome){
+           
+           case true:
+            res.status(201).json({Message: 'Login successful', Token: token});
+           break;
+           case false:
+            res.status(401).json({Message: 'Login Failed'});
+           break;
+        }
+            
+    })
+   }
+
+});
 
 //Dashboard - Counselors - View upcomming sessions
 app.get(Controller+CounselorDashboard, async(req,res)=>{
@@ -241,17 +236,14 @@ app.get(Controller+CounselorDashboard, async(req,res)=>{
 
             
         });
-})
+});
 //Update Appointments
 app.patch(Controller+CounselorAppointmentsUpdate, async(req,res)=>{
 
     //DDOS Protection 
     ThembaDDOSProtect.prevent;
 
-   
-
     if(typeof(req.body.ID) == 'undefined'){
-
 
     }else{
 
@@ -266,15 +258,14 @@ app.patch(Controller+CounselorAppointmentsUpdate, async(req,res)=>{
     }
  
 
-})
+});
 
-app.use(Controller+AttendSession,AppointmentsRoute)
+
+app.use(Controller+ValidateSession,AppointmentsRoute)
 app.use(Controller+FilePoliceReport,PoliceReportsRoute)
 app.use(Controller+RegisterCounselors,CounselorsRoute)
 app.use(Controller+LoginCounselors,CounselorsRoute)
 app.use(Controller+CounselorDashboard,AppointmentsRoute)
 app.use(Controller+CounselorAppointmentsUpdate,AppointmentsRoute)
-
-
 
 module.exports = app;

@@ -1,4 +1,5 @@
 //Report Related Functions - Reserved For Patients
+###
 POST https://localhost:3000/Themba/Report HTTP/1.1
 content-type: application/json
 
@@ -16,16 +17,16 @@ POST https://localhost:3000/Themba/Register HTTP/1.1
 content-type: application/json
 
 {
-    "Username": "BobbyTen",
-    "Passcode": "L@mbert_7835$#"
+    "Username": "Thamsanqa Veli",
+    "Passcode": "Benni(4205^#"
 }
 ###
 POST https://localhost:3000/Themba/Login HTTP/1.1
 content-type: application/json
 
 {
-    "Username": "BobbyTen",
-    "Passcode": "L@mbert_7835$#"
+    "Username": "Thamsanqa Veli",
+    "Passcode": "Benni(4205^#"
 }
 //Appointment Related Functions - Reserved For Counselors
 ###
@@ -57,3 +58,5 @@ content-type: application/json
     "DayAndTime": "18 March 2023 15:00"
 
 }
+###
+GET https://localhost:3000 HTTP/1.1
